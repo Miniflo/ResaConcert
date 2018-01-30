@@ -4,12 +4,15 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,8 +21,10 @@ public class FenetrePrincipale extends JFrame {
 	private JTextField txtRecherche;
 	private JButton btnOK, btnReservations;
 	private JMenuBar menuBar;
-	private JMenu menuAccueil, menuReservation, menuClients;
+	private JMenuItem menuAccueil, menuReservations, menuClients;
 	private JLabel txtSpectacle, txtLieu, txtDate;
+	private JLabel txtNom, txtPrenom, txtMail;
+	private JLabel txtSpectacleReserve, txtNbPlace;
 	
 	
 	public FenetrePrincipale() {
@@ -30,7 +35,10 @@ public class FenetrePrincipale extends JFrame {
 		setTitle("Reservation Spectacle");
 		initMenuBar();
 		menuAccueil();
+		menuReservations();
 		
+		
+		setContentPane(menuAccueil());
 		setVisible(true);
 	}
 	
@@ -38,13 +46,11 @@ public class FenetrePrincipale extends JFrame {
 		menuBar = new JMenuBar();
 		
 		menuBar.add(getMenuAccueil());
-		menuBar.add(getMenuReservation());
+		menuBar.add(getMenuReservations());
 		menuBar.add(getMenuClients());
 		
 		menuBar.setVisible(true);
 		setJMenuBar(menuBar);
-		
-		setContentPane(zoneRecherche());
 	}
 	
 
@@ -66,9 +72,9 @@ public class FenetrePrincipale extends JFrame {
 		
 		
 		gbc.gridy=2;
-		panelAccueil.add(zoneRepetee(), gbc);
+		panelAccueil.add(zoneRepeteeAccueil(), gbc);
 		gbc.gridy = 3;
-		panelAccueil.add(zoneRepetee(), gbc);
+		panelAccueil.add(zoneRepeteeAccueil(), gbc);
 		
 		return panelAccueil;
 	}
@@ -84,7 +90,7 @@ public class FenetrePrincipale extends JFrame {
 		return panelRecherche;
 	}
 	
-	public JPanel zoneRepetee(){
+	public JPanel zoneRepeteeAccueil(){
 		JPanel panelZoneRepetee = new JPanel();
 		panelZoneRepetee.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -107,7 +113,7 @@ public class FenetrePrincipale extends JFrame {
 	
 /*********************************** RESERVATIONS ***********************************/
 	
-	public void menuReservations(){
+	public JPanel menuReservations(){
 		JPanel panelReservations = new JPanel();
 		panelReservations.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -117,9 +123,21 @@ public class FenetrePrincipale extends JFrame {
 		// Ligne 1
 		gbc.gridx=0;
 		gbc.gridy=0;
+		panelReservations.add(new JLabel("Réservations"));
 		
+		return panelReservations;
+	}
+	
+	public JPanel zoneRepeteeReservations(){
+		JPanel panelZoneRepetee = new JPanel();
+		panelZoneRepetee.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 		
-		setContentPane(panelReservations);
+		// Ligne 1
+		gbc.gridx=0;
+		gbc.gridy=0;
+		
+		return panelZoneRepetee;
 	}
 	
 
@@ -151,7 +169,7 @@ public class FenetrePrincipale extends JFrame {
 	
 /*********************************** JButton ***********************************/
 	public JButton getBtnOK(){
-		if (btnOK == null) {
+		if (btnOK == null){
 			btnOK = new JButton("OK");
 		}
 		return btnOK;
@@ -163,28 +181,48 @@ public class FenetrePrincipale extends JFrame {
 	}
 	
 /*********************************** JMenu ***********************************/
-	public JMenu getMenuAccueil(){
+	public JMenuItem getMenuAccueil(){
 		if (menuAccueil == null) {
-			menuAccueil = new JMenu("Accueil");
+			menuAccueil = new JMenuItem("Accueil");
+			menuAccueil.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					changnerFen(menuAccueil());
+				}
+
+			});
 		}
 		return menuAccueil;
 	}
 	
-	public JMenu getMenuReservation(){
-		if (menuReservation == null) {
-			menuReservation = new JMenu("Réservations");
+	public JMenuItem getMenuReservations(){
+		if (menuReservations == null) {
+			menuReservations = new JMenuItem("Réservations");
+			menuReservations.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					changnerFen(menuReservations());
+				}
+
+			});
 		}
-		return menuReservation;
+		return menuReservations;
 	}
 	
-	public JMenu getMenuClients(){
+	public JMenuItem getMenuClients(){
 		if (menuClients == null) {
-			menuClients = new JMenu("Clients");
+			menuClients = new JMenuItem("Clients");
 		}
 		return menuClients;
 	}
 	
-	
+	public void changnerFen(JPanel panel){
+		setContentPane(panel);
+		repaint();
+		revalidate();
+	}
 	
 	
 }
