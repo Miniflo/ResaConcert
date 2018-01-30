@@ -50,6 +50,12 @@ public class Reservation {
 	public void setvDate_reservation(Date vDate_reservation) {
 		this.vDate_reservation = vDate_reservation;
 	}
+	@Override
+	public String toString() {
+		return "Reservation [vCode_reservation=" + vCode_reservation + ", vSpectacle_id=" + vSpectacle_id
+				+ ", vClient_id=" + vClient_id + ", vNombre_places=" + vNombre_places + ", vDate_reservation="
+				+ vDate_reservation + "]";
+	}
 	
 	
 }

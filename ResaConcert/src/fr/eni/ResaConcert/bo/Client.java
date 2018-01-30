@@ -62,6 +62,11 @@ public class Client {
 	public void setvVille(String vVille) {
 		this.vVille = vVille;
 	}
+	@Override
+	public String toString() {
+		return "Client [ID=" + ID + ", vNom=" + vNom + ", vPrenom=" + vPrenom + ", vEmail=" + vEmail + ", vAdresse="
+				+ vAdresse + ", vCode_postal=" + vCode_postal + ", vVille=" + vVille + "]";
+	}
 	
 	
 }

@@ -68,5 +68,11 @@ public class Spectacle
 	public void setvPlaces_disponibles(int vPlaces_disponibles) {
 		this.vPlaces_disponibles = vPlaces_disponibles;
 	}
+
+	@Override
+	public String toString() {
+		return "Spectacle [vID=" + vID + ", vTitre=" + vTitre + ", vArtiste=" + vArtiste + ", vLieu=" + vLieu
+				+ ", vDate=" + vDate + ", vPlaces_disponibles=" + vPlaces_disponibles + "]";
+	}
 	
 }
