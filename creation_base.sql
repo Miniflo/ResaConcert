@@ -25,7 +25,7 @@ alter table reservation add constraint reservation_client_fk foreign key(client_
 							references client(id);
 
 create table client(
-id int not null,
+id int not null identity,
 nom varchar(200) not null,
 prenom varchar(200) not null,
 email varchar(200) not null,
@@ -49,15 +49,36 @@ CLIENTS :
 Pour chaque ligne  : 
 Select nom, prenom, email from Client.
 
-insert into client (id, nom, prenom, email, adresse, code_postal, ville) values (3, 'curie', 'marie', 'curiemarie@gmail.com', '4 boulevard du cirque', 44000, 'nantes');
+
 Select nom, prenom, email from Client;
 
 RESERVATIONS : 
 Select nom, prenom, email from client jointure Select nombre places reservation jointure select titre, artiste, date from spectacle
 Delete resa from reservations + alter table spectacle pour modifier nb places
 
+
+
 RESA EFFECTUEE : 
 Select Places disponibles, artiste, lieu, date, titre from spectacle jointure codereservation from reservation. 
+
+
+insert : 
+
+insert into reservation(spectacle_id, client_id, nombre_places, date_reservation) values();
+insert into reservation(nombre_places) values(?);
+
+ 
+ -- jeu d'essai--
+ 
+insert into spectacle(titre, artiste, lieu, date, places_disponibles) values ('good bye tour','Johnny Hallyday','Olympia','2018-02-01','3');
+
+insert into client (nom, prenom, email, adresse, code_postal, ville) values ('curie', 'marie', 'curiemarie@gmail.com', '4 boulevard du cirque', 44000, 'nantes');
+insert into client (nom, prenom, email, adresse, code_postal, ville) values ('poulain', 'amelie', 'poulainamelie@gmail.com', '41 place vandome', 44000, 'nantes');
+insert into client (nom, prenom, email, adresse, code_postal, ville) values ('hugo', 'victor', 'hugovictor@gmail.com', '3 rue de la loire', 44000, 'nantes');
+insert into client (nom, prenom, email, adresse, code_postal, ville) values ('gabin', 'jean', 'gabinjean@gmail.com', '12 avenue des rois', 44000, 'nantes');
+
+insert into reservation(code_reservation, spectacle_id, client_id, nombre_places, date_reservation) values ('45FZ53D1',1,1,1,'2017-09-21');
+ --fin jeu d'essai--
 
 
 
