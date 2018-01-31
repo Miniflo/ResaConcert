@@ -49,6 +49,9 @@ CLIENTS :
 Pour chaque ligne  : 
 Select nom, prenom, email from Client.
 
+insert into client (id, nom, prenom, email, adresse, code_postal, ville) values (3, 'curie', 'marie', 'curiemarie@gmail.com', '4 boulevard du cirque', 44000, 'nantes');
+Select nom, prenom, email from Client;
+
 RESERVATIONS : 
 Select nom, prenom, email from client jointure Select nombre places reservation jointure select titre, artiste, date from spectacle
 Delete resa from reservations + alter table spectacle pour modifier nb places
