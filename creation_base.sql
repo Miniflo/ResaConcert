@@ -80,5 +80,6 @@ insert into client (nom, prenom, email, adresse, code_postal, ville) values ('ga
 insert into reservation(code_reservation, spectacle_id, client_id, nombre_places, date_reservation) values ('45FZ53D1',1,1,1,'2017-09-21');
  --fin jeu d'essai--
 
+update spectacle set places_disponibles = ? /* enlever une reservation -> rajouter places disponibles */
 
 
