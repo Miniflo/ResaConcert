@@ -1,5 +1,9 @@
 package fr.eni.ResaConcert.dal;
 
+import java.util.List;
+
+import fr.eni.ResaConcert.bo.Reservation;
+
 public interface ReservationDAO {
 
 

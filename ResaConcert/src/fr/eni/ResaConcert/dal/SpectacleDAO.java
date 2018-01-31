@@ -1,5 +1,9 @@
 package fr.eni.ResaConcert.dal;
 
+import java.util.List;
+
+import fr.eni.ResaConcert.bo.Spectacle;
+
 public interface SpectacleDAO {
 
 	//Selectionner un spectacle par son id

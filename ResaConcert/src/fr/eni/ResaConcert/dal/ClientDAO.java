@@ -2,8 +2,7 @@ package fr.eni.ResaConcert.dal;
 
 import java.util.List;
 
-import fr.eni.papeterie.bo.Article;
-import fr.eni.papeterie.dal.DALException;
+import fr.eni.ResaConcert.bo.Client;
 
 public interface ClientDAO {
 
