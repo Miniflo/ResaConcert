@@ -1,8 +1,8 @@
 package fr.eni.ResaConcert.ihm;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
@@ -19,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class FenetrePrincipale extends JFrame {
-	
-	public JPanel panelAccueil, panelReservations;
+
+	public JPanel panelAccueil, panelReservations, panelClients, panelReservationLogIn;
 	public GridBagConstraints gbcAccueil, gbcReservations, gbcClients;
 	
 	// Menu
@@ -31,15 +32,32 @@ public class FenetrePrincipale extends JFrame {
 	private JTextField txtAccRecherche;
 	private JButton btnAccOK;
 	private JLabel txtAccArtiste, txtAccSpectacle, txtAccLieu, txtAccDate;
+	JButton[] tabBtnReservations = new JButton[20];
+	int indexBtnReservations = 0;
+	int indexRetourBtnReservations = 0;
 	
 	// Reservations
-	private JButton btnResReservations, btnResAnnuler;
 	private JLabel txtResNom, txtResPrenom, txtResMail;
 	private JLabel txtResArtiste, txtResSpectacle, txtResLieu, txtResDate, txtResNbPlace;
+	JButton[] tabBtnAnnuler = new JButton[20];
+	int indexBtnAnnuler = 0;
+	int indexRetourBtnAnnuler = 0;
+	
+	// Reservation login
+	private JTextField fieldNom, fieldPrenom, fieldEmail, fieldAdresse, fieldCP, fieldVille;
+	private JComboBox<Integer> comboPlaces, comboPlacesNew;
+	private JComboBox<Client> comboClients;
+	private JButton btnValiderNew, btnValider;
 	
 	// Clients
-	private JLabel txtCliNom, txtCliPrenom, txtCliMail;
-	private JButton btnCliReservations, btnCliSupprimer;
+	private JButton btnCliSupprimer;
+	JButton[] tabBtnReservationsCli = new JButton[20];
+	int indexBtnReservationsCli = 0;
+	int indexRetourBtnReservationsCli = 0;
+	
+	JButton[] tabBtnSupprimer = new JButton[20];
+	int indexBtnSupprimer = 0;
+	int indexRetourBtnSupprimer = 0;
 	
 	
 	public FenetrePrincipale() {
@@ -51,6 +69,7 @@ public class FenetrePrincipale extends JFrame {
 		initMenuBar();
 		menuAccueil();
 		menuReservations();
+		menuClients();
 		setContentPane(menuAccueil());
 		setVisible(true);
 	}
@@ -73,13 +92,16 @@ public class FenetrePrincipale extends JFrame {
 			panelAccueil = new JPanel();
 			panelAccueil.setLayout(new GridBagLayout());
 			gbcAccueil = new GridBagConstraints();
-	
+			
 			// Titre
 			gbcAccueil.gridx=0;
 			gbcAccueil.gridy=0;
-			panelAccueil.add(new JLabel("Liste des spectacles"), gbcAccueil);
+			Font font = new Font("Arial",Font.BOLD,22);
+			JLabel label = new JLabel("Listes des spectacles");
+			label.setFont(font);
+			panelAccueil.add(label,gbcAccueil);
 			
-			gbcAccueil.insets = new Insets(30, 5, 5, 5);
+			gbcAccueil.insets = new Insets(5, 5, 25, 5);
 			
 			// Zone de recherche 
 			gbcAccueil.gridy = 1;
@@ -100,7 +122,7 @@ public class FenetrePrincipale extends JFrame {
 	}
 
 
-	public JPanel zoneRepeteeAccueil(String spec, String art, String lieu, String date){
+	public JPanel zoneRepeteeAccueil(int id, String spec, String info, int place){
 		JPanel panelZoneRepetee = new JPanel();
 		panelZoneRepetee.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -108,42 +130,22 @@ public class FenetrePrincipale extends JFrame {
 		// Ligne spectacle
 		gbc.gridx=0;
 		gbc.gridy=0;
-		panelZoneRepetee.add(zoneSpectacle(spec, art), gbc);
+		panelZoneRepetee.add(new JLabel(spec), gbc);
 		gbc.gridx = 1;
 		gbc.gridheight = 2;
 		gbc.insets = new Insets(10,150,10,10);
-		panelZoneRepetee.add(getBtnResReservations(),gbc);
+		panelZoneRepetee.add(getBtnResReservations(id, place),gbc);
 		gbc.gridheight = 1;
 		gbc.insets = new Insets(0,0,0,0);
 		
 		// Ligne info
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		panelZoneRepetee.add(this.zoneInfo(lieu, date),gbc);
+		panelZoneRepetee.add(new JLabel(info),gbc);
 		
 		panelZoneRepetee.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
 		
 		return panelZoneRepetee;
-	}
-	
-	private JPanel zoneSpectacle(String spec, String art){
-		JPanel panelSpectacle = new JPanel();
-		panelSpectacle.setLayout(new FlowLayout());
-		
-		panelSpectacle.add(getTxtAccArtiste(art));
-		panelSpectacle.add(getTxtAccSpectacle(spec));
-
-		return panelSpectacle;
-	}
-	
-	private JPanel zoneInfo(String lieu, String date){
-		JPanel panelInfo = new JPanel();
-		panelInfo.setLayout(new FlowLayout());
-		
-		panelInfo.add(getTxtAccLieu(lieu));
-		panelInfo.add(getTxtAccDate(date));
-
-		return panelInfo;
 	}
 	
 	
@@ -155,17 +157,20 @@ public class FenetrePrincipale extends JFrame {
 			panelReservations.setLayout(new GridBagLayout());
 			gbcReservations = new GridBagConstraints();
 			
-			gbcReservations.insets = new Insets(5, 5, 5, 5);
+			gbcReservations.insets = new Insets(25, 5, 5, 5);
 			
 			// Ligne 1
 			gbcReservations.gridx=0;
 			gbcReservations.gridy=0;
-			panelReservations.add(new JLabel("Réservations"),gbcReservations);
+			Font font = new Font("Arial",Font.BOLD,22);
+			JLabel res = new JLabel("Reservations");
+			res.setFont(font);
+			panelReservations.add(res);
 		}
 		return panelReservations;
 	}
 	
-	public JPanel zoneRepeteeReservations(String nom, String prenom, String mail, String art, String spec, String date, int nbPlace){
+	public JPanel zoneRepeteeReservations(int id, String client,String spec, String info, int nbPlace){
 		JPanel panelZoneRepetee = new JPanel();
 		panelZoneRepetee.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -173,11 +178,11 @@ public class FenetrePrincipale extends JFrame {
 		// Ligne 1
 		gbc.gridx=0;
 		gbc.gridy=0;
-		panelZoneRepetee.add(zoneReservationPersonne(nom, prenom,mail),gbc);
+		panelZoneRepetee.add(new JLabel(client),gbc);
 		gbc.gridx = 1;
 		gbc.insets = new Insets(10,50,10,10);
 		gbc.gridheight = 2;
-		panelZoneRepetee.add(this.getBtnAnnuler(),gbc);
+		panelZoneRepetee.add(this.getBtnAnnuler(id),gbc);
 		gbc.insets = new Insets(0,0,0,0);
 		gbc.gridheight = 1;
 		panelZoneRepetee.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
@@ -185,28 +190,15 @@ public class FenetrePrincipale extends JFrame {
 		// Ligne 2
 		gbc.gridx=0;
 		gbc.gridy=1;
-		panelZoneRepetee.add(zoneReservationSpectacle(art,spec,date,nbPlace),gbc);
+		panelZoneRepetee.add(zoneReservationSpectacle(spec,info,nbPlace),gbc);
 		
 		return panelZoneRepetee;
 	}
 	
-	public JPanel zoneReservationPersonne(String nom, String prenom, String mail){
-		JPanel panelPersonne = new JPanel();
-		panelPersonne.setLayout(new FlowLayout());
-		
-		panelPersonne.add(this.getTxtResNom(nom));
-		panelPersonne.add(this.getTxtResPrenom(prenom));
-		panelPersonne.add(new JLabel(" / "));
-		panelPersonne.add(this.getTxtResMail(mail));
-		
-		return panelPersonne;
-	}
-	
-	public JPanel zoneReservationSpectacle(String art, String spec, String date, int nbPlace){
+	public JPanel zoneReservationSpectacle(String spec, String date, int nbPlace){
 		JPanel panelSpectacle = new JPanel();
 		panelSpectacle.setLayout(new FlowLayout());
-		
-		panelSpectacle.add(this.getTxtResArtiste(art));
+	
 		panelSpectacle.add(this.getTxtResSpectacle(spec));
 		panelSpectacle.add(this.getTxtResDateReservation(date));
 		panelSpectacle.add(this.getTxtResNbPlace(String.valueOf(nbPlace)));
@@ -218,40 +210,204 @@ public class FenetrePrincipale extends JFrame {
 /*********************************** Menu CLIENTS ***********************************/
 	
 	public JPanel menuClients(){
-		JPanel panelClients = new JPanel();
-		panelClients.setLayout(new GridBagLayout());
-		gbcClients = new GridBagConstraints();
-		
-		gbcClients.insets = new Insets(5, 5, 5, 5);
-		
-		// Ligne 1
-		gbcClients.gridx=0;
-		gbcClients.gridy=0;
-		panelClients.add(new JLabel("Clients"));
-		
+		if (panelClients == null){
+			panelClients = new JPanel();
+			panelClients.setLayout(new GridBagLayout());
+			gbcClients = new GridBagConstraints();
+			
+			gbcClients.insets = new Insets(5, 5, 5, 5);
+
+			gbcClients.gridx=0;
+			gbcClients.gridy=0;
+			panelClients.add(new JLabel("Clients"));
+		}
 		return panelClients;
 	}
 	
-
-	private JPanel zoneRepeteeClients() {
-		JPanel panelClient = new JPanel();
-		panelClient.setLayout(new FlowLayout(FlowLayout.LEADING, 15, 10));
+	public JPanel zoneRepeteeClients(int id, String clients) {
+		JPanel panelClient = new JPanel();		
+		panelClient.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
 		
-		panelClient.add(this.getTxtCliNom());
-		panelClient.add(this.getTxtCliPrenom());
-		panelClient.add(new JLabel(" / "));
-		panelClient.add(this.getTxtCliMail());
-		panelClient.add(this.getBtnCliReservations());
-		panelClient.add(this.getBtnCliSupprimer());
+		panelClient.add(new JLabel(clients));
+		panelClient.add(this.zoneRepeteeClientsBtn(id));
 		
 		panelClient.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
 		
 		return panelClient;
 	}
-
-/*********************************** Methodes Affichage ***********************************/	
-
 	
+	private JPanel zoneRepeteeClientsBtn(int id) {
+		JPanel panelClient = new JPanel();		
+		panelClient.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 10));
+		
+		panelClient.add(this.getBtnCliReservations(id));
+		panelClient.add(this.getBtnCliSupprimer(id));
+
+		return panelClient;
+	}
+	
+	
+	
+/*********************************** Reservation LogIn ***********************************/
+	
+	public JPanel menuReservationLogIn(String spec, String info, int places){
+		if (panelReservationLogIn == null){
+			panelReservationLogIn = new JPanel();
+			panelReservationLogIn.setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			
+			// Titre
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 2;
+			panelReservationLogIn.add(zoneTitreReservationLogIn(),gbc);
+			gbc.gridwidth = 1;
+			
+			gbc.insets = new Insets(5, 5, 5, 5);
+			
+			// Ligne 2
+			gbc.gridy = 1;
+			panelReservationLogIn.add(new JLabel(spec),gbc);
+			gbc.gridx = 1;
+			gbc.gridheight = 2;
+			panelReservationLogIn.add(zoneNbPlaces(places),gbc);
+			gbc.gridheight = 1;
+			
+			// Ligne 3
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			panelReservationLogIn.add(new JLabel(info),gbc);
+					
+			gbc.gridx = 0;
+			gbc.gridy = 3;
+			panelReservationLogIn.add(zoneNouveauClient(), gbc);
+			gbc.gridx = 1;
+			panelReservationLogIn.add(zoneConnexion(), gbc);
+			
+			
+		}
+		return panelReservationLogIn;
+	}
+	
+	private JPanel zoneNbPlaces(int places){
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		panel.add(new JLabel("Places disponibles : "));
+		panel.add(new JLabel(String.valueOf(places)));
+		return panel;
+	}
+	
+	private JPanel zoneTitreReservationLogIn(){
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		Font font = new Font("Arial",Font.BOLD,22);
+		JLabel res = new JLabel("Reservation");
+		res.setFont(font);
+		panel.add(res);
+		return panel;
+	}
+	
+	private JPanel zoneConnexion(){
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.insets = new Insets(40, 45, 5, 45);
+		
+		panel.setBorder(BorderFactory.createTitledBorder("Client existant"));
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(this.getComboClients(),gbc);
+		
+		gbc.gridy = 1;
+		panel.add(this.getComboPlaces(), gbc);
+		
+		gbc.gridy = 2;
+		panel.add(this.getBtnValider(), gbc);
+		
+		
+		return panel;
+	}
+	
+	private JPanel zoneNouveauClient(){
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.insets = new Insets(5, 5, 0, 5);
+		
+		panel.setBorder(BorderFactory.createTitledBorder("Nouveau client"));
+		
+		// Nom
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(new JLabel("Nom : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldNom(), gbc);
+		
+		// Prenom
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(new JLabel("Prenom : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldPrenom(), gbc);
+		
+		// Email
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(new JLabel("Email : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldEMail(), gbc);
+		
+		// Adresse
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panel.add(new JLabel("Adresse : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldAdresse(), gbc);
+		
+		// Code Postal
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		panel.add(new JLabel("Code Postal : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldCP(), gbc);
+		
+		// Ville
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		panel.add(new JLabel("Ville : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getFieldVille(), gbc);
+		
+		// Nb places
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		panel.add(new JLabel("Places : "),gbc);
+		gbc.gridx = 1;
+		panel.add(this.getComboPlacesNew(), gbc);
+		
+		// Valider
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		gbc.gridwidth = 2;
+		panel.add(this.getBtnValiderNew(),gbc);
+		
+		
+		return panel;
+	}
+	
+/*********************************** Menu validation ***********************************/
+
+
+/*********************************** Methodes d'Affichage ***********************************/	
+
+	public void changnerFen(JPanel panel){
+		setContentPane(panel);
+		repaint();
+		revalidate();
+	}	
 	
 /*********************************** JLabel ***********************************/	
 
@@ -314,21 +470,6 @@ public class FenetrePrincipale extends JFrame {
 		txtResNbPlace = new JLabel(text);
 		return txtResNbPlace;
 	}
-	
-	public JLabel getTxtCliNom(){
-		txtCliNom = new JLabel("Nom");
-		return txtCliNom;
-	}
-	
-	public JLabel getTxtCliPrenom(){
-		txtCliPrenom = new JLabel("Prenom");
-		return txtCliPrenom;
-	}
-	
-	public JLabel getTxtCliMail(){
-		txtCliMail = new JLabel("Mail");
-		return txtCliMail;
-	}
 
 /*********************************** JTextField ***********************************/
 	public JTextField getTxtAccRecherche(){
@@ -347,24 +488,159 @@ public class FenetrePrincipale extends JFrame {
 		return btnAccOK;
 	}
 	
-	public JButton getBtnResReservations(){
-		btnResReservations = new JButton("Reservations");
-		return btnResReservations;
+	public JButton getBtnResReservations(int id, int place){
+		if (place <= 0){
+			tabBtnReservations[indexBtnReservations] = new JButton("Indisponible");
+			tabBtnReservations[indexBtnReservations].setName(String.valueOf(id));
+			tabBtnReservations[indexBtnReservations].setBackground(Color.RED);
+			tabBtnReservations[indexBtnReservations].setEnabled(false);
+		} else {
+			tabBtnReservations[indexBtnReservations] = new JButton("Reservations");
+			tabBtnReservations[indexBtnReservations].setName(String.valueOf(id));
+			tabBtnReservations[indexBtnReservations].setBackground(Color.GREEN);
+		}
+		tabBtnReservations[indexBtnReservations].addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				indexRetourBtnReservations = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
+				Controller.get().reserver(indexRetourBtnReservations);
+			}
+
+		});
+		indexBtnReservations++;
+		return tabBtnReservations[indexBtnReservations-1];
 	}
 	
-	public JButton getBtnAnnuler(){
-		btnResAnnuler = new JButton("Annuler");
-		return btnResAnnuler;
+	public JButton getBtnAnnuler(int id){
+		tabBtnAnnuler[indexBtnAnnuler] = new JButton("Annuler");
+		tabBtnAnnuler[indexBtnAnnuler].setName(String.valueOf(id));
+		tabBtnAnnuler[indexBtnAnnuler].addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				indexRetourBtnAnnuler = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
+				Controller.get().annuler(indexRetourBtnAnnuler);
+			}
+
+		});
+		indexBtnAnnuler++;
+		return tabBtnAnnuler[indexBtnAnnuler-1];
 	}
 	
-	public JButton getBtnCliReservations(){
-		btnCliReservations = new JButton("Reservations");
-		return btnCliReservations;
+	public JButton getBtnCliReservations(int id){
+		tabBtnReservationsCli[indexBtnReservationsCli] = new JButton("Reservations");
+		tabBtnReservationsCli[indexBtnReservationsCli].setName(String.valueOf(id));
+		tabBtnReservationsCli[indexBtnReservationsCli].addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				indexRetourBtnReservationsCli = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
+				Controller.get().ReservationsClient(indexRetourBtnReservationsCli);
+			}
+
+		});
+		indexBtnReservationsCli++;
+		return tabBtnReservationsCli[indexBtnReservationsCli-1];
 	}
 	
-	public JButton getBtnCliSupprimer(){
-		btnCliSupprimer = new JButton("Supprimer");
-		return btnCliSupprimer;
+	public JButton getBtnCliSupprimer(int id){
+		tabBtnSupprimer[indexBtnSupprimer] = new JButton("Supprimer");
+		tabBtnSupprimer[indexBtnSupprimer].setName(String.valueOf(id));
+		tabBtnSupprimer[indexBtnSupprimer].addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				indexRetourBtnSupprimer = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
+				Controller.get().supprimer(indexRetourBtnSupprimer);
+			}
+
+		});
+		indexBtnSupprimer++;
+		return tabBtnSupprimer[indexBtnSupprimer-1];
+	}
+	
+	public JButton getBtnValider(){
+		if (btnValider == null){
+			btnValider = new JButton("Valider");
+		}
+		return btnValider;
+	}
+	
+	public JButton getBtnValiderNew(){
+		if (btnValiderNew == null){
+			btnValiderNew = new JButton("Valider");
+		}
+		return btnValiderNew;
+	}
+	
+/*********************************** JTextField ***********************************/
+	
+	public JTextField getFieldNom(){
+		if (fieldNom == null){
+			fieldNom = new JTextField(15);
+		}
+		return fieldNom;
+	}
+	
+	public JTextField getFieldPrenom(){
+		if (fieldPrenom == null){
+			fieldPrenom = new JTextField(15);
+		}
+		return fieldPrenom;
+	}
+	
+	public JTextField getFieldEMail(){
+		if (fieldEmail == null){
+			fieldEmail = new JTextField(15);
+		}
+		return fieldEmail;
+	}
+	
+	public JTextField getFieldAdresse(){
+		if (fieldAdresse == null){
+			fieldAdresse = new JTextField(15);
+		}
+		return fieldAdresse;
+	}
+	
+	public JTextField getFieldVille(){
+		if (fieldVille == null){
+			fieldVille = new JTextField(15);
+		}
+		return fieldVille;
+	}
+	
+	public JTextField getFieldCP(){
+		if (fieldCP == null){
+			fieldCP = new JTextField(15);
+		}
+		return fieldCP;
+	}
+
+/*********************************** JComboBox ***********************************/	
+
+	public JComboBox<Integer> getComboPlaces(){
+		if (comboPlaces == null){
+			Integer tab[] = {1,2,3,4,5,6,7,8,9};
+			comboPlaces = new JComboBox<Integer>(tab);
+		}
+		return comboPlaces;
+	}
+	
+	public JComboBox<Integer> getComboPlacesNew(){
+		if (comboPlacesNew == null){
+			Integer tab[] = {1,2,3,4,5,6,7,8,9};
+			comboPlacesNew = new JComboBox<Integer>(tab);
+		}
+		return comboPlacesNew;
+	}
+	
+	public JComboBox<Client> getComboClients(){
+		if (comboClients == null){
+			comboClients = new JComboBox<Client>();
+		}
+		return comboClients;
 	}
 	
 /*********************************** JMenu ***********************************/
@@ -412,12 +688,5 @@ public class FenetrePrincipale extends JFrame {
 		}
 		return menuClients;
 	}
-	
-	public void changnerFen(JPanel panel){
-		setContentPane(panel);
-		repaint();
-		revalidate();
-	}
-	
 	
 }

@@ -7,6 +7,8 @@ public class Controller {
 	private static Controller instance;
 	FenetrePrincipale fen;
 	
+	JPanel[] spectacles = new JPanel[20];
+	
 	private Controller(){
 		
 	}
@@ -22,14 +24,18 @@ public class Controller {
 		fen = new FenetrePrincipale();
 		setSpectacleAccueil();
 		setReservations();
+		setClients();
 		fen.setVisible(true);
 	}
 	
 	public void setSpectacleAccueil(){
 		int i = 0;
-		while (i < 2){
+		while (i < 3){
 			fen.gbcAccueil.gridy++;
-			fen.panelAccueil.add(fen.zoneRepeteeAccueil("Johnny", "Haliday", "Nantes", "31/01/18"),fen.gbcAccueil);
+			String spec = "Johnny Haliday" + ", " + "good bye tour";
+			String info = "Nantes" + " / " + "31-01-18";
+			spectacles[i] = fen.zoneRepeteeAccueil(i, spec, info, 20);
+			fen.panelAccueil.add(spectacles[i],fen.gbcAccueil);
 			i++;
 		}
 	}
@@ -38,24 +44,39 @@ public class Controller {
 		int i = 0;
 		while (i < 3){
 			fen.gbcReservations.gridy++;
-			fen.panelReservations.add(fen.zoneRepeteeReservations("jean", "pierre", "abc@abc.com", "johnny haliday", "spectacle johnny", "31/01/2018", 2),fen.gbcReservations);
+			String client = "Mickaël" + " " + "VIAUD" + " / " +  "mickael.viaud@gmail.com";
+			String spec = "Johnny Haliday" + ", " + "good bye tour";
+			String info = "31-01-18";
+			fen.panelReservations.add(fen.zoneRepeteeReservations(i, client, spec, info, 2),fen.gbcReservations);
 			i++;
 		}
 	}
 	
-	public void Reserver(){
-		
+	public void setClients(){
+		int i = 0;
+		while (i<3){
+			fen.gbcClients.gridy++;
+			String client = "Mickaël" + " " + "VIAUD" + " / " +  "mickael.viaud@gmail.com";
+			fen.panelClients.add(fen.zoneRepeteeClients(i,client),fen.gbcClients);
+			i++;
+		}
 	}
 	
-	public void supprimer(){
-		
+	public void reserver(int index){
+		fen.changnerFen(fen.menuReservationLogIn("spec", "info", 50));
 	}
 	
-	public void annuler(){
-		
+	public void supprimer(int index){
+		System.out.println("supprimer index : " + index);
 	}
 	
-	public void reservations(){
-		
+	public void annuler(int index){
+		System.out.println("annuler index : " + index);
 	}
+	
+	public void ReservationsClient(int index){
+		System.out.println("reservations client index : " + index);
+		fen.changnerFen(fen.panelReservations);
+	}
+	
 }
