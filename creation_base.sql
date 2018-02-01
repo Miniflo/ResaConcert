@@ -58,6 +58,8 @@ RESERVATIONS :
 Select nom, prenom, email from client jointure Select nombre places reservation jointure select titre, artiste, date from spectacle
 Delete resa from reservations + alter table spectacle pour modifier nb places
 
+delete * from reservation where code_reservation=?
+
 select nom, prenom, email, nombre_places, titre, artiste, date from reservation r join client c on r.client_id = c.id join spectacle s on r.spectacle_id = s.id; 
 
 
