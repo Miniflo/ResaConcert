@@ -19,7 +19,8 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 	private static final String sqlSelectAll = "Select * from Client";
 	private static final String sqlSelectById = "Select * from Client where id = ?";
 	private static final String sqlInsert = "insert into client(nom,prenom,email,adresse,code_postal,ville) values(?,?,?,?,?,?)";
-
+	private static final String sqlDelete = "delete * from Client where id =? ";
+	
 	public Client selectById(int id) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
@@ -142,6 +143,38 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 				}
 	
 			}
+		}
+
+		@Override
+		public void delete(int id) throws DALException {
+			Connection cnx = null;
+			PreparedStatement rqt = null;
+			try {
+				cnx = JDBCTools.getConnection();
+				rqt = cnx.prepareStatement(sqlDelete);
+				rqt.setInt(1, id);
+
+				rqt.executeQuery();
+				
+				}
+	
+			catch (SQLException e) {
+				throw new DALException("delete failed - id = " + id , e);
+			} finally {
+				try {
+					
+					if (rqt != null){
+						rqt.close();
+					}
+					if(cnx!=null){
+						cnx.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+	
+			}
+			
 		}
 
 	

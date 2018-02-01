@@ -37,6 +37,15 @@ public class ClientManager {
 		}
 	}
 	
+	public void deleteClient(int id) throws BLLException {
+		try {
+			daoClient.delete(id);
+		} catch (DALException e){
+			throw new BLLException("Echec d'ajout du client.", e);
+		}
+	}
+	
+	
 	public void validerClient(Client c) throws BLLException{
 		boolean valide = true;
 		StringBuffer sb = new StringBuffer();
