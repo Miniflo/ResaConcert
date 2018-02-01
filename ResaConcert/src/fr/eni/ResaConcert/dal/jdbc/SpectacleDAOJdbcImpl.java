@@ -1,4 +1,6 @@
-package pn;
+package fr.eni.ResaConcert.dal.jdbc;
+
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +9,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.eni.ResaConcert.bo.Spectacle;
+import fr.eni.ResaConcert.dal.DALException;
+import fr.eni.ResaConcert.dal.SpectacleDAO;
 
 public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 
@@ -21,7 +27,7 @@ public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 			ResultSet rs = null;
 			Spectacle spectacle = null; 
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlSelectById);
 				rqt.setInt(1, id);
 
@@ -65,7 +71,7 @@ public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 			ResultSet rs = null;
 			List<Spectacle> liste = new ArrayList<Spectacle>();
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.createStatement();
 				rs = rqt.executeQuery(sqlSelectAll);
 				Spectacle spectacle = null;
@@ -108,7 +114,7 @@ public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
 				rqt.setInt(1, nb_places);
 		

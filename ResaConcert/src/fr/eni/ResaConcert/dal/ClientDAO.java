@@ -3,7 +3,7 @@ package fr.eni.ResaConcert.dal;
 import java.util.List;
 
 import fr.eni.ResaConcert.bo.Client;
-import pn.DALException;
+import fr.eni.ResaConcert.dal.DALException;
 
 public interface ClientDAO {
 	

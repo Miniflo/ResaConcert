@@ -8,9 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import pn.Client;
-import pn.DALException;
-import pn.JdbcTools;
+import fr.eni.ResaConcert.bo.Client;
+import fr.eni.ResaConcert.dal.ClientDAO;
+import fr.eni.ResaConcert.dal.DALException;
+
+
 
 public class ClientDAOJdbcImpl implements ClientDAO{
 
@@ -24,7 +26,7 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 			ResultSet rs = null;
 			Client client = null; 
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlSelectById);
 				rqt.setInt(1, id);
 
@@ -69,7 +71,7 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 			ResultSet rs = null;
 			List<Client> liste = new ArrayList<Client>();
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.createStatement();
 				rs = rqt.executeQuery(sqlSelectAll);
 				Client client = null;
@@ -113,7 +115,7 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				rqt.setString(1, client.getvNom());
 				rqt.setString(2, client.getvPrenom());

@@ -25,7 +25,7 @@ public class DAOFactory {
 	public static SpectacleDAO getSpectacleDAO()  {
 	SpectacleDAO spectacleDAO=null;
 	try {
-		spectacleDAO=(SpectacleDAO ) Class.forName("fr.eni.papeterie.dal.jdbc.SpectacleDAOJdbcImpl").newInstance();
+		spectacleDAO=(SpectacleDAO ) Class.forName("fr.eni.ResaConcert.dal.jdbc.SpectacleDAOJdbcImpl").newInstance();
 	} catch (InstantiationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

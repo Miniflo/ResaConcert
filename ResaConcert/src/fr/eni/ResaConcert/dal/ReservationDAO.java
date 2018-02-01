@@ -2,6 +2,7 @@ package fr.eni.ResaConcert.dal;
 
 import java.util.List;
 
+import fr.eni.ResaConcert.bo.Client;
 import fr.eni.ResaConcert.bo.Reservation;
 
 public interface ReservationDAO {
@@ -20,6 +21,9 @@ public interface ReservationDAO {
 	public void insert(Reservation data) throws DALException;
 
 	//Supprimer la reservation mis en parametre
- 	public void delete(int id) throws DALException;
+ 	public void delete(String vCode_Reservation) throws DALException;
+ 	
+ 	//Selectionner une reservation par un client
+ 	public Reservation selectByClient(Client client) throws DALException;
  	
 }

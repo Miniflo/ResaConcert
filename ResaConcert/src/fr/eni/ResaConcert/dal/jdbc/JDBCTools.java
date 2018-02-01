@@ -1,11 +1,13 @@
-package pn;
+package fr.eni.ResaConcert.dal.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import fr.eni.ResaConcert.dal.Settings;
 
-public class JdbcTools {
+
+public class JDBCTools {
 
 	
 	private static  String urldb;

@@ -1,9 +1,12 @@
-package pn;
+package fr.eni.ResaConcert.dal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import fr.eni.ResaConcert.bo.Client;
+import fr.eni.ResaConcert.bo.Spectacle;
 
 
 public class AppliTestDAL {
