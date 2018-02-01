@@ -3,7 +3,16 @@ package fr.eni.ResaConcert.ihm;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import javax.swing.JPanel;
+
+import fr.eni.ResaConcert.bll.BLLException;
+import fr.eni.ResaConcert.bll.ClientManager;
+import fr.eni.ResaConcert.bll.ReservationManager;
+import fr.eni.ResaConcert.bll.SpectacleManager;
+import fr.eni.ResaConcert.bo.Client;
+import fr.eni.ResaConcert.bo.Reservation;
+import fr.eni.ResaConcert.bo.Spectacle;
 
 public class Controller {
 	
@@ -14,13 +23,13 @@ public class Controller {
 	FenetrePrincipale fen;
 	JPanel[] tabSpec = new JPanel[20];
 	
-	private Controller(){
+	private Controller() throws BLLException{
 		clients = ClientManager.getInstance().getClient();
 		reservations = ReservationManager.getInstance().getReservation();
 		spectacles = SpectacleManager.getInstance().getSpectacle();
 	}
 	
-	public static Controller getInstance(){
+	public static Controller getInstance() throws BLLException{
 		if ( Controller.instance == null){
 			Controller.instance = new Controller();
 		}
@@ -37,7 +46,7 @@ public class Controller {
 	
 	public void setSpectacleAccueil(){
 		int i = 0;
-		while (i < spectacles.size()-1){
+		while (i < spectacles.size()){
 			fen.gbcAccueil.gridy++;
 			String spec = spectacles.get(i).getvArtiste() + ", " + spectacles.get(i).getvTitre();
 			String info = spectacles.get(i).getvLieu() + " / " + spectacles.get(i).getvDate();
@@ -53,10 +62,10 @@ public class Controller {
 		while (i < reservations.size()-1){
 			fen.gbcReservations.gridy++;
 			int clientID = reservations.get(i).getvClient_id();
-			String client = clients.get(clientID).getvPrenom() + " " + clients.get(clientID).getvNom() + " / " + clients.get(clientID).getvEmail();
+			String client = clients.get(clientID-1).getvPrenom() + " " + clients.get(clientID-1).getvNom() + " / " + clients.get(clientID-1).getvEmail();
 			
 			int specID = reservations.get(i).getvSpectacle_id();
-			String spec = spectacles.get(specID).getvArtiste() + ", " + spectacles.get(specID).getvTitre();
+			String spec = spectacles.get(specID-1).getvArtiste() + ", " + spectacles.get(specID-1).getvTitre();
 			
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 			String info = df.format(reservations.get(i).getvDate_reservation());
@@ -83,23 +92,23 @@ public class Controller {
 		fen.changnerFen(fen.menuReservationLogIn(specIndex,spec, info, nbPlace));
 	}
 	
-	public void supprimer(int index){
+	public void supprimer(int index) throws BLLException{
 		ClientManager.getInstance().deleteClient(index);
 		clients = ClientManager.getInstance().getClient();
 	}
 	
-	public void annuler(int index){
+	public void annuler(int index) throws BLLException{
 		ReservationManager.getInstance().deleteReservation(String.valueOf(index));
 		reservations = ReservationManager.getInstance().getReservation();
 	}
 	
-	public void reservationsClient(int index){
-		clients = ReservationManager.getInstance().getReservationByClient(index);
-		setClients();
+	public void reservationsClient(int index) throws BLLException{
+		reservations = ReservationManager.getInstance().getReservationByClient(index);
+		setReservations();
 		fen.changnerFen(fen.panelReservations);
 	}
 	
-	public void validerNew(){
+	public void validerNew() throws BLLException{
 		ajouterClient();
 		System.out.println("Creation reservation");
 		fen.changnerFen(fen.menuValidation("spec", "info", 50, "ABCDEF"));
@@ -115,7 +124,7 @@ public class Controller {
 		fen.changnerFen(fen.menuAccueil());
 	}
 	
-	private void ajouterClient(){
+	private void ajouterClient() throws BLLException{
 		String nom = fen.getFieldNom().getText();
 		String prenom = fen.getFieldPrenom().getText();
 		String email = fen.getFieldEMail().getText();
@@ -127,7 +136,7 @@ public class Controller {
 		clients = ClientManager.getInstance().getClient();
 	}
 	
-	public void reservationsAll(){
+	public void reservationsAll() throws BLLException{
 		fen.panelReservations = null;
 		clients = ClientManager.getInstance().getClient();
 		setReservations();

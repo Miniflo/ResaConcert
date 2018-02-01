@@ -57,7 +57,7 @@ public class ClientManager {
 		try {
 			daoClient.delete(id);
 		} catch (DALException e){
-			throw new BLLException("Echec d'ajout du client.", e);
+			throw new BLLException("Echec de suppression du client.", e);
 		}
 	}
 	

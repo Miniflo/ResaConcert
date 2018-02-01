@@ -2,6 +2,7 @@ package fr.eni.ResaConcert.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -21,6 +22,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import fr.eni.ResaConcert.bll.BLLException;
+import fr.eni.ResaConcert.bo.Client;
 
 public class FenetrePrincipale extends JFrame {
 
@@ -71,7 +75,7 @@ public class FenetrePrincipale extends JFrame {
 	public FenetrePrincipale() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setSize(500, 400);
+		setSize(510, 400);
 		setResizable(false);
 		setTitle("Reservation Spectacle");
 		initMenuBar();
@@ -79,6 +83,11 @@ public class FenetrePrincipale extends JFrame {
 		menuReservations();
 		menuClients();
 		setContentPane(menuAccueil());
+		
+		Container contain = this.getContentPane();
+		JScrollPane scroll = new JScrollPane(contain);
+		this.setContentPane(scroll);
+		
 		setVisible(true);
 	}
 	
@@ -99,7 +108,7 @@ public class FenetrePrincipale extends JFrame {
 		if (panelAccueil == null){
 			panelAccueil = new JPanel();
 			panelAccueil.setLayout(new GridBagLayout());
-			panelAccueil.setPreferredSize(new Dimension(800, 800));
+			//panelAccueil.setPreferredSize(new Dimension(800, 800));
 			gbcAccueil = new GridBagConstraints();
 			
 			// Titre
@@ -499,6 +508,9 @@ public class FenetrePrincipale extends JFrame {
 
 	public void changnerFen(JPanel panel){
 		setContentPane(panel);
+		Container contain = this.getContentPane();
+		JScrollPane scroll = new JScrollPane(contain);
+		this.setContentPane(scroll);
 		repaint();
 		revalidate();
 	}	
@@ -598,7 +610,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnReservations = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.getInstance().reserver(indexRetourBtnReservations);
+				try {
+					Controller.getInstance().reserver(indexRetourBtnReservations);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -614,7 +631,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnAnnuler = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.getInstance().annuler(indexRetourBtnAnnuler);
+				try {
+					Controller.getInstance().annuler(indexRetourBtnAnnuler);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -630,7 +652,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnReservationsCli = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.getInstance().reservationsClient(indexRetourBtnReservationsCli);
+				try {
+					Controller.getInstance().reservationsClient(indexRetourBtnReservationsCli);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -646,7 +673,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnSupprimer = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.getInstance().supprimer(indexRetourBtnSupprimer);
+				try {
+					Controller.getInstance().supprimer(indexRetourBtnSupprimer);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -661,7 +693,12 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.getInstance().valider(spectacleID);
+					try {
+						Controller.getInstance().valider(spectacleID);
+					} catch (BLLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
@@ -675,7 +712,12 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.getInstance().validerNew();
+					try {
+						Controller.getInstance().validerNew();
+					} catch (BLLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
@@ -689,7 +731,12 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.getInstance().retourAccueil();
+					try {
+						Controller.getInstance().retourAccueil();
+					} catch (BLLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
@@ -788,7 +835,12 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.getInstance().reservationsAll();
+					try {
+						Controller.getInstance().reservationsAll();
+					} catch (BLLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			});

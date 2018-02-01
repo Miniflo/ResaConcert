@@ -3,14 +3,28 @@ package fr.eni.ResaConcert.bll;
 import java.util.List;
 
 import fr.eni.ResaConcert.bo.Spectacle;
+import fr.eni.ResaConcert.dal.ClientDAO;
 import fr.eni.ResaConcert.dal.DALException;
 import fr.eni.ResaConcert.dal.DAOFactory;
 import fr.eni.ResaConcert.dal.SpectacleDAO;
 
 public class SpectacleManager {
 
+	
+	
 	private static SpectacleDAO daoSpectacle;
-
+	
+	private static SpectacleManager instance;
+	
+	public static SpectacleManager getInstance() throws BLLException {
+        if (null == instance) { // Premier appel
+                if (null == instance) {
+                    instance = new SpectacleManager();
+                }
+        }
+        return instance;
+    }
+	
 	public SpectacleManager() throws BLLException{
 		daoSpectacle = DAOFactory.getSpectacleDAO();
 	}
