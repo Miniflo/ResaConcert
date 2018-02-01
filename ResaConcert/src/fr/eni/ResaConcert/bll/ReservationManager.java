@@ -42,8 +42,8 @@ public class ReservationManager {
 		}
 	}
 	
-	public List<Client> getReservationByClient(int numero_Client) throws BLLException{
-		List<Client> ResaByClient = null;
+	public List<Reservation> getReservationByClient(int numero_Client) throws BLLException{
+		List<Reservation> ResaByClient = null;
 		try{
 			ResaByClient = daoReservation.selectByClient(numero_Client);
 		}catch(DALException e){

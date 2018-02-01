@@ -21,6 +21,6 @@ public interface ReservationDAO {
  	public void delete(String vCode_Reservation) throws DALException;
  	
  	//Selectionner une reservation par un client
- 	public List<Client> selectByClient(int iD) throws DALException;
+ 	public List<Reservation> selectByClient(int iD) throws DALException;
  	
 }
