@@ -1,7 +1,8 @@
 package fr.eni.ResaConcert.bo;
 
-
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 
 public class Reservation {
 
@@ -11,10 +12,29 @@ public class Reservation {
 	private int vClient_id;
 	private int vNombre_places;
 	private Date vDate_reservation;
-	public Reservation(String vCode_reservation, int vSpectacle_id, int vClient_id, int vNombre_places,
-			Date vDate_reservation) {
+	public Reservation(int vSpectacle_id, int vClient_id, int vNombre_places,
+			Date vDate_reservation) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	
 		super();
-		this.vCode_reservation = vCode_reservation;
+		Sha1 vSha1 = new Sha1();
+		String vAConvertir = String.valueOf(System.nanoTime());
+		String vConverti= vSha1.sha1(vAConvertir);
+		
+		vConverti=vConverti.substring(0, 19);
+		this.vCode_reservation = vConverti;
+		this.vSpectacle_id = vSpectacle_id;
+		this.vClient_id = vClient_id;
+		this.vNombre_places = vNombre_places;
+		this.vDate_reservation = vDate_reservation;
+	}	
+	public Reservation(String code_reservation, int vSpectacle_id, int vClient_id, int vNombre_places,
+			Date vDate_reservation) {
+	
+		super();
+
+		
+		
+		this.vCode_reservation = code_reservation;
 		this.vSpectacle_id = vSpectacle_id;
 		this.vClient_id = vClient_id;
 		this.vNombre_places = vNombre_places;
@@ -50,6 +70,7 @@ public class Reservation {
 	public void setvDate_reservation(Date vDate_reservation) {
 		this.vDate_reservation = vDate_reservation;
 	}
+	
 	@Override
 	public String toString() {
 		return "Reservation [vCode_reservation=" + vCode_reservation + ", vSpectacle_id=" + vSpectacle_id
