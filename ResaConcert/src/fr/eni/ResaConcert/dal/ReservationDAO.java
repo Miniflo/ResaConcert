@@ -9,13 +9,10 @@ public interface ReservationDAO {
 
 
 	//Selectionner une reservation par son id
-	public Reservation selectById(int id) throws DALException;
+	public Reservation selectById(String vCode_Reservation) throws DALException;
 	
 	//Selectionner toutes les reservations
 	public List<Reservation> selectAll() throws DALException;
-
-	//Modifier la reservation mis en parametre
-	public void update(Reservation data) throws DALException;
 
 	//Inserer la reservation mis en parametre
 	public void insert(Reservation data) throws DALException;
@@ -24,6 +21,6 @@ public interface ReservationDAO {
  	public void delete(String vCode_Reservation) throws DALException;
  	
  	//Selectionner une reservation par un client
- 	public Reservation selectByClient(Client client) throws DALException;
+ 	public List<Client> selectByClient(int iD) throws DALException;
  	
 }

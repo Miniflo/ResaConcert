@@ -19,6 +19,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import fr.eni.ResaConcert.bo.Client;
+
 public class FenetrePrincipale extends JFrame {
 
 	public JPanel panelAccueil, panelReservations, panelClients, panelReservationLogIn;

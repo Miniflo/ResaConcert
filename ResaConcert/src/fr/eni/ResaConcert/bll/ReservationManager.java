@@ -2,6 +2,7 @@ package fr.eni.ResaConcert.bll;
 
 import java.util.List;
 
+import fr.eni.ResaConcert.bo.Client;
 import fr.eni.ResaConcert.bo.Reservation;
 import fr.eni.ResaConcert.dal.DALException;
 import fr.eni.ResaConcert.dal.DAOFactory;
@@ -40,6 +41,18 @@ public class ReservationManager {
 			throw new BLLException("Echec de la suppresion de la reservation.", e);
 		}
 	}
+	
+	public List<Client> getReservationByClient(int numero_Client) throws BLLException{
+		List<Client> ResaByClient = null;
+		try{
+			ResaByClient = daoReservation.selectByClient(numero_Client);
+		}catch(DALException e){
+			throw new BLLException("Erreur récuperation réservation du client", e);
+		}
+		return ResaByClient;
+	}
+	
+	
 	
 	
 
