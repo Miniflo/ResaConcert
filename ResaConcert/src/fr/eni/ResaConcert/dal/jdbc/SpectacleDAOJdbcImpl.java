@@ -1,4 +1,4 @@
-package fr.eni.ResaConcert.dal.jdbc;
+package pn;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,21 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import pn.Client;
-import pn.DALException;
-import pn.JdbcTools;
+public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 
-public class ClientDAOJdbcImpl implements ClientDAO{
 
-	private static final String sqlSelectAll = "Select * from Client";
-	private static final String sqlSelectById = "Select * from Client where id = ?";
-	private static final String sqlInsert = "insert into client(nom,prenom,email,adresse,code_postal,ville) values(?,?,?,?,?,?)";
-
-	public Client selectById(int id) throws DALException {
+	private static final String sqlSelectAll = "Select * from Spectacle";
+	private static final String sqlSelectById = "Select * from Spectacle where id = ?";
+	private static final String sqlUpdate = "update spectacle set places_disponibles = ?";
+	
+	public Spectacle selectById(int id) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			ResultSet rs = null;
-			Client client = null; 
+			Spectacle spectacle = null; 
 			try {
 				cnx = JdbcTools.getConnection();
 				rqt = cnx.prepareStatement(sqlSelectById);
@@ -30,13 +27,12 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 
 				rs = rqt.executeQuery();
 				if (rs.next()){
-					client = new Client(rs.getInt("id"),
-							rs.getString("nom"),
-							rs.getString("prenom"),
-							rs.getString("email"),
-							rs.getString("adresse"),
-							rs.getString("code_postal"),
-							rs.getString("ville"));
+					spectacle = new Spectacle(rs.getInt("id"),
+							rs.getString("titre"),
+							rs.getString("artiste"),
+							rs.getString("lieu"),
+							rs.getDate("date"),
+							rs.getInt("places_disponibles"));
 					
 					}
 				}
@@ -59,32 +55,31 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 				}
 	
 			}
-			return client;
+			return spectacle;
 		}
 	
 		@Override
-		public List<Client> selectAll() throws DALException {
+		public List<Spectacle> selectAll() throws DALException {
 			Connection cnx = null;
 			Statement rqt = null;
 			ResultSet rs = null;
-			List<Client> liste = new ArrayList<Client>();
+			List<Spectacle> liste = new ArrayList<Spectacle>();
 			try {
 				cnx = JdbcTools.getConnection();
 				rqt = cnx.createStatement();
 				rs = rqt.executeQuery(sqlSelectAll);
-				Client client = null;
+				Spectacle spectacle = null;
 	
 				while (rs.next()) {
-						client = new Client(rs.getInt("id"),
-								rs.getString("nom"),
-								rs.getString("prenom"),
-								rs.getString("email"),
-								rs.getString("adresse"),
-								rs.getString("code_postal"),
-								rs.getString("ville"));
+						spectacle = new Spectacle(rs.getInt("id"),
+								rs.getString("titre"),
+								rs.getString("artiste"),
+								rs.getString("lieu"),
+								rs.getDate("date"),
+								rs.getInt("places_disponibles"));
 					
 					
-					liste.add(client);
+					liste.add(spectacle);
 				}
 			} catch (SQLException e) {
 				throw new DALException("selectAll failed - " , e);
@@ -109,23 +104,18 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 		}
 		
 		@Override
-		public void insert(Client client) throws DALException {
+		public void update_nb_places(Spectacle spectacle, int nb_places) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
 				cnx = JdbcTools.getConnection();
-				rqt = cnx.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
-				rqt.setString(1, client.getvNom());
-				rqt.setString(2, client.getvPrenom());
-				rqt.setString(3, client.getvEmail());
-				rqt.setString(4, client.getvAdresse());
-				rqt.setString(5, client.getvCode_postal());
-				rqt.setString(6, client.getvVille());
-				
+				rqt = cnx.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
+				rqt.setInt(1, nb_places);
+		
 				rqt.executeUpdate();
 				
 			}catch(SQLException e){
-				throw new DALException("Insert client failed - " + client, e);
+				throw new DALException("Update spectacle failed - " + spectacle, e);
 			}
 			finally {
 				try {
@@ -141,10 +131,26 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 	
 			}
 		}
+	
+	
+	
+	
+	
 
 	
 
 
 
 
-	}
+
+
+
+
+
+
+
+
+
+
+
+}

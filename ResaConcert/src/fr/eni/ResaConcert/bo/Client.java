@@ -9,10 +9,21 @@ public class Client {
 	private String vAdresse;
 	private String vCode_postal;
 	private String vVille;
-	public Client(int iD, String vNom, String vPrenom, String vEmail, String vAdresse, String vCode_postal,
+	public Client(String vNom, String vPrenom, String vEmail, String vAdresse, String vCode_postal,
 			String vVille) {
 		super();
-		ID = iD;
+	
+		this.vNom = vNom;
+		this.vPrenom = vPrenom;
+		this.vEmail = vEmail;
+		this.vAdresse = vAdresse;
+		this.vCode_postal = vCode_postal;
+		this.vVille = vVille;
+	}
+	public Client(int aID,String vNom, String vPrenom, String vEmail, String vAdresse, String vCode_postal,
+			String vVille) {
+		super();
+		ID = aID;
 		this.vNom = vNom;
 		this.vPrenom = vPrenom;
 		this.vEmail = vEmail;
@@ -62,6 +73,7 @@ public class Client {
 	public void setvVille(String vVille) {
 		this.vVille = vVille;
 	}
+	
 	@Override
 	public String toString() {
 		return "Client [ID=" + ID + ", vNom=" + vNom + ", vPrenom=" + vPrenom + ", vEmail=" + vEmail + ", vAdresse="

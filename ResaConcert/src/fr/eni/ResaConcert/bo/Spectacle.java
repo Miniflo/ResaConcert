@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Spectacle
 {
-
 	private int vID;
 	private String vTitre;
 	private String vArtiste;
@@ -17,6 +16,13 @@ public class Spectacle
 		this.vDate = aDate;
 		this.vPlaces_disponibles =aPlaces_disponibles;
 		this.vID = aID;
+		this.vLieu = aLieu;
+		this.vTitre = aTitre;
+	}
+	public Spectacle(String aTitre, String aArtiste, String aLieu, Date aDate, int aPlaces_disponibles ){
+		this.vArtiste= aArtiste;
+		this.vDate = aDate;
+		this.vPlaces_disponibles =aPlaces_disponibles;
 		this.vLieu = aLieu;
 		this.vTitre = aTitre;
 	}
@@ -68,11 +74,11 @@ public class Spectacle
 	public void setvPlaces_disponibles(int vPlaces_disponibles) {
 		this.vPlaces_disponibles = vPlaces_disponibles;
 	}
-
 	@Override
 	public String toString() {
-		return "Spectacle [vID=" + vID + ", vTitre=" + vTitre + ", vArtiste=" + vArtiste + ", vLieu=" + vLieu
+		return "Spectacle [ID=" + vID + ", vTitre=" + vTitre + ", vArtiste=" + vArtiste + ", vLieu=" + vLieu
 				+ ", vDate=" + vDate + ", vPlaces_disponibles=" + vPlaces_disponibles + "]";
 	}
+	
 	
 }
