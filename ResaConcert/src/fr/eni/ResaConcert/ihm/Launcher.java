@@ -9,7 +9,7 @@ public class Launcher {
 
 			@Override
 			public void run() {
-				Controller.get().startApp();
+				Controller.getInstance().startApp();
 			}
 			
 		});

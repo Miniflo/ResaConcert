@@ -22,11 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import fr.eni.ResaConcert.bll.BLLException;
-import fr.eni.ResaConcert.bo.Client;
-
 public class FenetrePrincipale extends JFrame {
 
+	int spectacleID;
+	int clientID;
+	
 	public JPanel panelAccueil, panelReservations, panelClients, panelReservationLogIn, panelValidation;
 	public GridBagConstraints gbcAccueil, gbcReservations, gbcClients;
 	
@@ -259,7 +259,8 @@ public class FenetrePrincipale extends JFrame {
 	
 /*********************************** Reservation LogIn ***********************************/
 	
-	public JPanel menuReservationLogIn(String spec, String info, int places){
+	public JPanel menuReservationLogIn(int specID, String spec, String info, int places){
+		spectacleID = specID;
 		if (panelReservationLogIn == null){
 			panelReservationLogIn = new JPanel();
 			panelReservationLogIn.setLayout(new GridBagLayout());
@@ -597,7 +598,7 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnReservations = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.get().reserver(indexRetourBtnReservations);
+				Controller.getInstance().reserver(indexRetourBtnReservations);
 			}
 
 		});
@@ -613,12 +614,7 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnAnnuler = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				try {
-					Controller.get().annuler(indexRetourBtnAnnuler);
-				} catch (BLLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Controller.getInstance().annuler(indexRetourBtnAnnuler);
 			}
 
 		});
@@ -634,7 +630,7 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnReservationsCli = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.get().reservationsClient(indexRetourBtnReservationsCli);
+				Controller.getInstance().reservationsClient(indexRetourBtnReservationsCli);
 			}
 
 		});
@@ -650,12 +646,7 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnSupprimer = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				try {
-					Controller.get().supprimer(indexRetourBtnSupprimer);
-				} catch (BLLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Controller.getInstance().supprimer(indexRetourBtnSupprimer);
 			}
 
 		});
@@ -670,7 +661,7 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.get().valider();
+					Controller.getInstance().valider(spectacleID);
 				}
 			});
 		}
@@ -684,12 +675,7 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						Controller.get().validerNew();
-					} catch (BLLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					Controller.getInstance().validerNew();
 				}
 			});
 		}
@@ -703,7 +689,7 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.get().retourAccueil();
+					Controller.getInstance().retourAccueil();
 				}
 			});
 		}
@@ -802,7 +788,7 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					changnerFen(menuReservations());
+					Controller.getInstance().reservationsAll();
 				}
 
 			});
