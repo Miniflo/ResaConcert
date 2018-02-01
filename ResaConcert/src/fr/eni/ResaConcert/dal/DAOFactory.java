@@ -42,7 +42,7 @@ public class DAOFactory {
 		public static ReservationDAO getReservationDAO()  {
 	ReservationDAO articleDAO=null;
 	try {
-		articleDAO=(ReservationDAO ) Class.forName("fr.eni.papeterie.dal.jdbc.ReservationDAOJdbcImpl").newInstance();
+		articleDAO=(ReservationDAO ) Class.forName("fr.eni.ResaConcert.dal.jdbc.ReservationDAOJdbcImpl").newInstance();
 	} catch (InstantiationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
