@@ -1,6 +1,8 @@
 package fr.eni.ResaConcert.ihm;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -17,13 +19,12 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-
-import fr.eni.ResaConcert.bo.Client;
 
 public class FenetrePrincipale extends JFrame {
 
-	public JPanel panelAccueil, panelReservations, panelClients, panelReservationLogIn;
+	public JPanel panelAccueil, panelReservations, panelClients, panelReservationLogIn, panelValidation;
 	public GridBagConstraints gbcAccueil, gbcReservations, gbcClients;
 	
 	// Menu
@@ -52,7 +53,6 @@ public class FenetrePrincipale extends JFrame {
 	private JButton btnValiderNew, btnValider;
 	
 	// Clients
-	private JButton btnCliSupprimer;
 	JButton[] tabBtnReservationsCli = new JButton[20];
 	int indexBtnReservationsCli = 0;
 	int indexRetourBtnReservationsCli = 0;
@@ -60,6 +60,9 @@ public class FenetrePrincipale extends JFrame {
 	JButton[] tabBtnSupprimer = new JButton[20];
 	int indexBtnSupprimer = 0;
 	int indexRetourBtnSupprimer = 0;
+	
+	// Validation
+	private JButton btnValAccueil;
 	
 	
 	public FenetrePrincipale() {
@@ -93,6 +96,7 @@ public class FenetrePrincipale extends JFrame {
 		if (panelAccueil == null){
 			panelAccueil = new JPanel();
 			panelAccueil.setLayout(new GridBagLayout());
+			panelAccueil.setPreferredSize(new Dimension(800, 800));
 			gbcAccueil = new GridBagConstraints();
 			
 			// Titre
@@ -108,6 +112,7 @@ public class FenetrePrincipale extends JFrame {
 			// Zone de recherche 
 			gbcAccueil.gridy = 1;
 			panelAccueil.add(zoneRecherche(),gbcAccueil);
+			final JScrollPane scroll = new JScrollPane(panelAccueil);
 		}
 		return panelAccueil;
 	}
@@ -249,7 +254,6 @@ public class FenetrePrincipale extends JFrame {
 	}
 	
 	
-	
 /*********************************** Reservation LogIn ***********************************/
 	
 	public JPanel menuReservationLogIn(String spec, String info, int places){
@@ -314,20 +318,27 @@ public class FenetrePrincipale extends JFrame {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		gbc.insets = new Insets(40, 45, 5, 45);
+		gbc.insets = new Insets(40, 20, 5, 20);
 		
 		panel.setBorder(BorderFactory.createTitledBorder("Client existant"));
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		gbc.gridwidth = 2;
 		panel.add(this.getComboClients(),gbc);
+		gbc.gridwidth = 1;
 		
+		gbc.gridx = 0;
 		gbc.gridy = 1;
+		panel.add(new JLabel("Places : "), gbc);
+		gbc.gridx = 1;
 		panel.add(this.getComboPlaces(), gbc);
 		
+		gbc.gridx = 0;
 		gbc.gridy = 2;
+		gbc.gridwidth = 2;
 		panel.add(this.getBtnValider(), gbc);
-		
+		gbc.gridwidth = 1;
 		
 		return panel;
 	}
@@ -402,7 +413,84 @@ public class FenetrePrincipale extends JFrame {
 	
 /*********************************** Menu validation ***********************************/
 
+	public JPanel menuValidation(String spec, String info, int places, String num){	
+		if (panelValidation == null){	
+			panelValidation = new JPanel();
+			panelValidation.setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			
+			gbc.insets = new Insets(10, 10, 10, 10);
+			
+			// Titre
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 2;
+			panelValidation.add(zoneTextValidation("Reservation", 22),gbc);
+			gbc.gridwidth = 1;		
+		
+			// Ligne 2
+			gbc.gridy = 1;
+			panelValidation.add(new JLabel(spec),gbc);
+			gbc.gridx = 1;
+			gbc.gridheight = 2;
+			panelValidation.add(zoneNbPlaces(places),gbc);
+			gbc.gridheight = 1;
+			
+			// Ligne 3
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			panelValidation.add(new JLabel(info),gbc);
+			
+			// Ligne 4
+			gbc.gridx = 0;
+			gbc.gridy = 3;
+			gbc.gridwidth = 2;
+			panelValidation.add(zoneTextValidation("Reservation Effectuée !", 32),gbc);
+			gbc.gridwidth = 1;
+			
+			// Ligne 5
+			gbc.gridx = 0;
+			gbc.gridy = 4;
+			gbc.gridwidth = 2;
+			panelValidation.add(zoneNumero(num),gbc);
+			gbc.gridwidth = 1;
+			
+			// Ligne 6
+			gbc.gridx = 0;
+			gbc.gridy = 5;
+			gbc.gridwidth = 2;
+			panelValidation.add(this.getBtnValidAccueil(),gbc);
+			gbc.gridwidth = 1;
+			
+		}
+		return panelValidation;
+	}
+	
+	private JPanel zoneTextValidation(String text, int taille){
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		Font font = new Font("Arial",Font.BOLD,taille);
+		JLabel res = new JLabel(text);
+		res.setFont(font);
+		panel.add(res);
+		return panel;
+	}
+	
+	private JPanel zoneNumero(String num){
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		Font font = new Font("Arial",Font.BOLD,20);
+		
+		JLabel text = new JLabel("Numéro de réservation : ");
+		text.setFont(font);
+		JLabel res = new JLabel(num);
+		res.setFont(font);
 
+		panel.add(text);
+		panel.add(res);
+		return panel;
+	}
+	
 /*********************************** Methodes d'Affichage ***********************************/	
 
 	public void changnerFen(JPanel panel){
@@ -538,7 +626,7 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnReservationsCli = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.get().ReservationsClient(indexRetourBtnReservationsCli);
+				Controller.get().reservationsClient(indexRetourBtnReservationsCli);
 			}
 
 		});
@@ -565,6 +653,13 @@ public class FenetrePrincipale extends JFrame {
 	public JButton getBtnValider(){
 		if (btnValider == null){
 			btnValider = new JButton("Valider");
+			btnValider.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Controller.get().valider();
+				}
+			});
 		}
 		return btnValider;
 	}
@@ -572,8 +667,29 @@ public class FenetrePrincipale extends JFrame {
 	public JButton getBtnValiderNew(){
 		if (btnValiderNew == null){
 			btnValiderNew = new JButton("Valider");
+			btnValiderNew.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Controller.get().validerNew();
+				}
+			});
 		}
 		return btnValiderNew;
+	}
+	
+	public JButton getBtnValidAccueil(){
+		if (btnValAccueil == null){
+			btnValAccueil = new JButton("Accueil");
+			btnValAccueil.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Controller.get().retourAccueil();
+				}
+			});
+		}
+		return btnValAccueil;
 	}
 	
 /*********************************** JTextField ***********************************/
