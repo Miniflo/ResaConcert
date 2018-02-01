@@ -11,6 +11,17 @@ import fr.eni.ResaConcert.dal.ReservationDAO;
 public class ReservationManager {
 	private static ReservationDAO daoReservation;
 	
+	private static ReservationManager instance;
+	
+	public static ReservationManager getInstance() throws BLLException {
+        if (null == instance) {
+                if (null == instance) {
+                    instance = new ReservationManager();
+                }
+        }
+        return instance;
+    }
+	
 	public ReservationManager() throws BLLException{
 		daoReservation = DAOFactory.getReservationDAO();
 	}
@@ -34,9 +45,9 @@ public class ReservationManager {
 		}
 	}
 	
-	public void removeReservation (Reservation reservation) throws BLLException{
+	public void deleteReservation (String vCode_Reservation) throws BLLException{
 		try{
-			daoReservation.delete(reservation.getvCode_reservation());
+			daoReservation.delete(vCode_Reservation);
 		}catch(DALException e){
 			throw new BLLException("Echec de la suppresion de la reservation.", e);
 		}
@@ -51,6 +62,7 @@ public class ReservationManager {
 		}
 		return ResaByClient;
 	}
+
 	
 	
 	

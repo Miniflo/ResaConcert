@@ -9,9 +9,25 @@ public class ClientManager {
 
 	private static ClientDAO daoClient;
 	
+	private static ClientManager instance;
+	
+	public static ClientManager getInstance() throws BLLException {
+        if (null == instance) { // Premier appel
+                if (null == instance) {
+                    instance = new ClientManager();
+                }
+        }
+        return instance;
+    }
+	
+	
+	
 	public ClientManager() throws BLLException{
 		daoClient = DAOFactory.getClientDAO();
+		
 	}
+	
+	
 	
 	
 	public List<Client> getClient() throws BLLException{

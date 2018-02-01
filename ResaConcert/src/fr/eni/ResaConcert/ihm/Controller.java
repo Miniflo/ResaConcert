@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import fr.eni.ResaConcert.bll.BLLException;
 import fr.eni.ResaConcert.bll.ClientManager;
 import fr.eni.ResaConcert.bll.ReservationManager;
 import fr.eni.ResaConcert.bo.Client;
@@ -79,13 +80,13 @@ public class Controller {
 		fen.changnerFen(fen.menuReservationLogIn("spec", "info", 50));
 	}
 	
-	public void supprimer(int index){
-		ClientManager.getInstance().removeClient(clients.get(index));
+	public void supprimer(int index) throws BLLException{
+		ClientManager.getInstance().deleteClient(index);
 		clients = ClientManager.getInstance().getClient();
 	}
 	
-	public void annuler(int index){
-		ReservationManager.getInstance().remove(reservations.get(index));
+	public void annuler(int index) throws BLLException{
+		ReservationManager.getInstance().deleteReservation(String.valueOf(index));
 		reservations = ReservationManager.getInstance().getReservation();
 	}
 	
@@ -94,7 +95,7 @@ public class Controller {
 		fen.changnerFen(fen.panelReservations);
 	}
 	
-	public void validerNew(){
+	public void validerNew() throws BLLException{
 		ajouterClient();
 		System.out.println("Creation reservation");
 		fen.changnerFen(fen.menuValidation("spec", "info", 50, "ABCDEF"));
@@ -109,7 +110,7 @@ public class Controller {
 		fen.changnerFen(fen.menuAccueil());
 	}
 	
-	private void ajouterClient(){
+	private void ajouterClient() throws BLLException{
 		String nom = fen.getFieldNom().getText();
 		String prenom = fen.getFieldPrenom().getText();
 		String email = fen.getFieldEMail().getText();

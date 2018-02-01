@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import fr.eni.ResaConcert.bll.BLLException;
 import fr.eni.ResaConcert.bo.Client;
 
 public class FenetrePrincipale extends JFrame {
@@ -612,7 +613,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnAnnuler = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.get().annuler(indexRetourBtnAnnuler);
+				try {
+					Controller.get().annuler(indexRetourBtnAnnuler);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -644,7 +650,12 @@ public class FenetrePrincipale extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				indexRetourBtnSupprimer = Integer.parseInt(e.toString().substring(e.toString().length() - 2).trim());				
-				Controller.get().supprimer(indexRetourBtnSupprimer);
+				try {
+					Controller.get().supprimer(indexRetourBtnSupprimer);
+				} catch (BLLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -673,7 +684,12 @@ public class FenetrePrincipale extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Controller.get().validerNew();
+					try {
+						Controller.get().validerNew();
+					} catch (BLLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
