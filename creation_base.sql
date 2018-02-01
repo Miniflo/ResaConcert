@@ -44,6 +44,8 @@ Pour chaque ligne :
 Select titre, artiste, lieu, date, places disponibles from Spectacle
 |-> On affiche tout sauf les places disponibles qui servent pour le bouton indisponible;
 
+Select titre, artiste, lieu, date, places_disponibles from Spectacle;
+
 CLIENTS : 
 
 Pour chaque ligne  : 
@@ -56,6 +58,7 @@ RESERVATIONS :
 Select nom, prenom, email from client jointure Select nombre places reservation jointure select titre, artiste, date from spectacle
 Delete resa from reservations + alter table spectacle pour modifier nb places
 
+select nom, prenom, email, nombre_places, titre, artiste, date from reservation r join client c on r.client_id = c.id join spectacle s on r.spectacle_id = s.id; 
 
 
 RESA EFFECTUEE : 
@@ -64,7 +67,7 @@ Select Places disponibles, artiste, lieu, date, titre from spectacle jointure co
 
 insert : 
 
-insert into reservation(spectacle_id, client_id, nombre_places, date_reservation) values();
+insert into reservation(spectacle_id, client_id, nombre_places, date_reservation) values(?);
 insert into reservation(nombre_places) values(?);
 
  
