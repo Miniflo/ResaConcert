@@ -1,7 +1,14 @@
 package fr.eni.ResaConcert.ihm;
 
 import java.util.List;
+
 import javax.swing.JPanel;
+
+import fr.eni.ResaConcert.bll.ClientManager;
+import fr.eni.ResaConcert.bll.ReservationManager;
+import fr.eni.ResaConcert.bo.Client;
+import fr.eni.ResaConcert.bo.Reservation;
+import fr.eni.ResaConcert.bo.Spectacle;
 
 public class Controller {
 	
@@ -74,7 +81,7 @@ public class Controller {
 	
 	public void supprimer(int index){
 		ClientManager.getInstance().removeClient(clients.get(index));
-		Clients = ClientManager.getInstance().getClient();
+		clients = ClientManager.getInstance().getClient();
 	}
 	
 	public void annuler(int index){

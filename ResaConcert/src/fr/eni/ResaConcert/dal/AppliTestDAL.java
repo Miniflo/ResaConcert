@@ -1,22 +1,19 @@
 package fr.eni.ResaConcert.dal;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import fr.eni.ResaConcert.bo.Client;
+import fr.eni.ResaConcert.bo.Reservation;
 import fr.eni.ResaConcert.bo.Spectacle;
-import pn.ClientDAO;
-import pn.DAOFactory;
-import pn.Reservation;
-import pn.ReservationDAO;
-import pn.SpectacleDAO;
 
 
 public class AppliTestDAL {
 
-	public static void main(String[] args) throws DALException, ParseException {
+	public static void main(String[] args) throws DALException, ParseException, NoSuchAlgorithmException, UnsupportedEncodingException {
 
 		ClientDAO clientDAO = DAOFactory.getClientDAO();
 		SpectacleDAO spectacleDAO = DAOFactory.getSpectacleDAO();
@@ -41,10 +38,10 @@ public class AppliTestDAL {
 			System.out.println("Premier Spectacle : " + vSpectacle.toString() );
 						
 			Reservation vReservation = new Reservation( 1, 1, 3,vdate);
-			Reservation vReservation2 = new Reservation( 1, 1, 2,vdate);
+//			Reservation vReservation2 = new Reservation( 1, 1, 2,vdate);
 
 			reservationDAO.insert(vReservation);
-			reservationDAO.insert(vReservation2);
+//			reservationDAO.insert(vReservation2);
 			
 			List<Reservation> vReservationsRecupereesviaIDClient = reservationDAO.selectByClient(1);
 			System.out.println("\n\n");
