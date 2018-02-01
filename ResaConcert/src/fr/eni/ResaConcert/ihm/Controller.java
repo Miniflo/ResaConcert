@@ -32,7 +32,7 @@ public class Controller {
 		int i = 0;
 		while (i < 3){
 			fen.gbcAccueil.gridy++;
-			String spec = "Johnny Haliday" + ", " + "good bye tour";
+			String spec = "Johnny Hallyday" + ", " + "good bye tour";
 			String info = "Nantes" + " / " + "31-01-18";
 			spectacles[i] = fen.zoneRepeteeAccueil(i, spec, info, 20);
 			fen.panelAccueil.add(spectacles[i],fen.gbcAccueil);
@@ -45,7 +45,7 @@ public class Controller {
 		while (i < 3){
 			fen.gbcReservations.gridy++;
 			String client = "Mickaël" + " " + "VIAUD" + " / " +  "mickael.viaud@gmail.com";
-			String spec = "Johnny Haliday" + ", " + "good bye tour";
+			String spec = "Johnny Hallyday" + ", " + "good bye tour";
 			String info = "31-01-18";
 			fen.panelReservations.add(fen.zoneRepeteeReservations(i, client, spec, info, 2),fen.gbcReservations);
 			i++;
