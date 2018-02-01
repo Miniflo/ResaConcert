@@ -8,11 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import pn.DALException;
-import pn.JdbcTools;
-import pn.Reservation;
+import fr.eni.ResaConcert.bo.Reservation;
+import fr.eni.ResaConcert.dal.DALException;
+import fr.eni.ResaConcert.dal.ReservationDAO;
 
-public class ReservationDAOJdbcImpl {
+
+
+public class ReservationDAOJdbcImpl implements ReservationDAO{
 
 	private static final String sqlSelectAll = "Select * from Reservation";
 	private static final String sqlSelectById = "Select * from Reservation where code_reservation = ?";
@@ -25,7 +27,7 @@ public class ReservationDAOJdbcImpl {
 			ResultSet rs = null;
 			Reservation reservation = null; 
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlSelectById);
 				rqt.setString(1, id);
 
@@ -62,14 +64,14 @@ public class ReservationDAOJdbcImpl {
 			return reservation;
 		}
 	
-		@Override
+	
 		public List<Reservation> selectAll() throws DALException {
 			Connection cnx = null;
 			Statement rqt = null;
 			ResultSet rs = null;
 			List<Reservation> liste = new ArrayList<Reservation>();
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.createStatement();
 				rs = rqt.executeQuery(sqlSelectAll);
 				Reservation reservation = null;
@@ -106,12 +108,12 @@ public class ReservationDAOJdbcImpl {
 	
 		}
 		
-		@Override
+
 		public void insert(Reservation reservation) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 
 				rqt = cnx.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				rqt.setString(1, reservation.getvCode_reservation());
@@ -140,7 +142,7 @@ public class ReservationDAOJdbcImpl {
 			}
 		}
 
-		@Override
+
 		public List<Reservation> selectByClient(int idClient) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
@@ -148,7 +150,7 @@ public class ReservationDAOJdbcImpl {
 			List<Reservation> listeResasClient = new ArrayList<Reservation>();
 
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlSelectByClient);
 				rqt.setInt(1, idClient);
 				Reservation reservation = null; 
@@ -187,19 +189,19 @@ public class ReservationDAOJdbcImpl {
 			return listeResasClient;
 		}
 		
-		@Override
+		
 		public void delete(String vCode_Reservation) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				/*rs.getString("code_reservation"),
 							rs.getInt("spectacle_id"),
 							rs.getInt("client_id"),
 							rs.getInt("nombre_places"),
 							rs.getDate("date_reservation")
 							);*/
-				cnx = JdbcTools.getConnection();
+				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlDelete);
 				rqt.setString(1, vCode_Reservation);
 
@@ -224,4 +226,5 @@ public class ReservationDAOJdbcImpl {
 				}
 	
 			}
-}
+		}
+	}

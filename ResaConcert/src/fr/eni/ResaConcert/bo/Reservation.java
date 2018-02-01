@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 
+import fr.eni.ResaConcert.dal.Sha1;
+
 public class Reservation {
 
 
