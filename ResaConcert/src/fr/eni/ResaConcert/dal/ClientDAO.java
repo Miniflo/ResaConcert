@@ -9,6 +9,7 @@ public interface ClientDAO {
 	
 	public Client selectById(int id) throws DALException;
 	
+
 	public List<Client> selectAll() throws DALException;
 	
 	public int insert(Client data) throws DALException;

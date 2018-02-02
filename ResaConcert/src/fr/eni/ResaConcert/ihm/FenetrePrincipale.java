@@ -872,8 +872,7 @@ public class FenetrePrincipale extends JFrame {
 			String[] vListeClients = new String[ClientManager.getInstance().getClient().size()];
 			List<Client> vListeClientele = ClientManager.getInstance().getClient();
 			for(int i=0;i<vListeClientele.size();i++){
-				vListeClients[i]=vListeClientele.get(i).getvNom()+" "+vListeClientele.get(i).getvPrenom()+" - "+vListeClientele.get(i).getvEmail();
-				
+				vListeClients[i]=vListeClientele.get(i).getvEmail();
 			}
 			comboClients = new JComboBox<String>(vListeClients);
 			

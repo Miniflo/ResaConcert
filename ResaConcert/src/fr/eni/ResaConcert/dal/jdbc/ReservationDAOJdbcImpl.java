@@ -20,7 +20,7 @@ public class ReservationDAOJdbcImpl implements ReservationDAO{
 	private static final String sqlSelectById = "Select * from Reservation where code_reservation = ?";
 	private static final String sqlSelectByClient= "Select * from Reservation where client_id = ?";
 	private static final String sqlInsert = "insert into reservation(code_reservation,spectacle_id,client_id,nombre_places,date_reservation) values(?,?,?,?,?)";
-	private static final String sqlDelete ="delete * from reservation where code_reservation=?";
+	private static final String sqlDelete ="delete from reservation where code_reservation=?";
 	public Reservation selectById(String id) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
@@ -204,10 +204,7 @@ public class ReservationDAOJdbcImpl implements ReservationDAO{
 							);*/
 				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlDelete);
-				rqt.setString(1, vCode_Reservation);
-
-				rqt.executeQuery();
-				
+				rqt.setString(1, vCode_Reservation);				
 				
 				rqt.executeUpdate();
 				
