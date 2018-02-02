@@ -11,6 +11,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import fr.eni.ResaConcert.bll.BLLException;
+import fr.eni.ResaConcert.bll.ClientManager;
 import fr.eni.ResaConcert.bo.Client;
 
 public class FenetrePrincipale extends JFrame {
@@ -42,29 +46,32 @@ public class FenetrePrincipale extends JFrame {
 	private JTextField txtAccRecherche;
 	private JButton btnAccOK;
 	private JLabel txtAccArtiste, txtAccSpectacle, txtAccLieu, txtAccDate;
-	JButton[] tabBtnReservations = new JButton[20];
+	JButton[] tabBtnReservations = new JButton[100];
 	int indexBtnReservations = 0;
 	int indexRetourBtnReservations = 0;
 	
 	// Reservations
 	private JLabel txtResNom, txtResPrenom, txtResMail;
 	private JLabel txtResArtiste, txtResSpectacle, txtResLieu, txtResDate, txtResNbPlace;
-	JButton[] tabBtnAnnuler = new JButton[20];
+	JButton[] tabBtnAnnuler = new JButton[100];
 	int indexBtnAnnuler = 0;
 	int indexRetourBtnAnnuler = 0;
 	
 	// Reservation login
 	private JTextField fieldNom, fieldPrenom, fieldEmail, fieldAdresse, fieldCP, fieldVille;
 	private JComboBox<Integer> comboPlaces, comboPlacesNew;
-	private JComboBox<Client> comboClients;
+	private JComboBox<String> comboClients;
 	private JButton btnValiderNew, btnValider;
+	private JLabel spec;
+	private JLabel info;
+	private JLabel nbPlaces;
 	
 	// Clients
-	JButton[] tabBtnReservationsCli = new JButton[20];
+	JButton[] tabBtnReservationsCli = new JButton[100];
 	int indexBtnReservationsCli = 0;
 	int indexRetourBtnReservationsCli = 0;
 	
-	JButton[] tabBtnSupprimer = new JButton[20];
+	JButton[] tabBtnSupprimer = new JButton[100];
 	int indexBtnSupprimer = 0;
 	int indexRetourBtnSupprimer = 0;
 	
@@ -75,7 +82,7 @@ public class FenetrePrincipale extends JFrame {
 	public FenetrePrincipale() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setSize(510, 400);
+		setSize(600, 400);
 		setResizable(false);
 		setTitle("Reservation Spectacle");
 		initMenuBar();
@@ -266,10 +273,10 @@ public class FenetrePrincipale extends JFrame {
 	}
 	
 	
-/*********************************** Reservation LogIn ***********************************/
+/*********************************** Reservation LogIn * @throws BLLException ***********************************/
 	
-	public JPanel menuReservationLogIn(int specID, String spec, String info, int places){
-		spectacleID = specID;
+	public JPanel menuReservationLogIn(String spec, String info, int places, int specindex) throws BLLException{
+		spectacleID = specindex+1;
 		if (panelReservationLogIn == null){
 			panelReservationLogIn = new JPanel();
 			panelReservationLogIn.setLayout(new GridBagLayout());
@@ -286,22 +293,39 @@ public class FenetrePrincipale extends JFrame {
 			
 			// Ligne 2
 			gbc.gridy = 1;
-			panelReservationLogIn.add(new JLabel(spec),gbc);
+			panelReservationLogIn.add(this.getTxtSpec(spec),gbc);
 			gbc.gridx = 1;
 			gbc.gridheight = 2;
-			panelReservationLogIn.add(zoneNbPlaces(places),gbc);
+			panelReservationLogIn.add(getTxtnbPlaces(String.valueOf(places)),gbc);
 			gbc.gridheight = 1;
 			
 			// Ligne 3
 			gbc.gridx = 0;
 			gbc.gridy = 2;
-			panelReservationLogIn.add(new JLabel(info),gbc);
+			panelReservationLogIn.add(this.getTxtInfo(info),gbc);
 					
 			gbc.gridx = 0;
 			gbc.gridy = 3;
 			panelReservationLogIn.add(zoneNouveauClient(), gbc);
 			gbc.gridx = 1;
 			panelReservationLogIn.add(zoneConnexion(), gbc);
+			
+			
+		}
+		else{
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridy = 1;
+			gbc.gridx = 0;
+			gbc.gridwidth = 1;
+
+			panelReservationLogIn.add(getTxtSpec(spec),gbc);
+			gbc.gridx = 1;
+			gbc.gridheight = 2;
+			panelReservationLogIn.add(getTxtnbPlaces(String.valueOf(places)),gbc);
+			gbc.gridheight = 1;
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			panelReservationLogIn.add(this.getTxtInfo(info),gbc);
 			
 			
 		}
@@ -326,12 +350,12 @@ public class FenetrePrincipale extends JFrame {
 		return panel;
 	}
 	
-	private JPanel zoneConnexion(){
+	private JPanel zoneConnexion() throws BLLException{
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		gbc.insets = new Insets(40, 20, 5, 20);
+		gbc.insets = new Insets(40, 5, 5, 5);
 		
 		panel.setBorder(BorderFactory.createTitledBorder("Client existant"));
 		
@@ -516,7 +540,35 @@ public class FenetrePrincipale extends JFrame {
 	}	
 	
 /*********************************** JLabel ***********************************/	
-
+	
+	public JLabel getTxtnbPlaces(String text){
+		if(nbPlaces==null){
+			nbPlaces = new JLabel("Nombre de places : "+text);
+		}
+		else{
+			nbPlaces.setText("Nombre de places : "+text);
+		}
+		return nbPlaces;
+	}
+	
+	public JLabel getTxtInfo(String text){
+		if(info==null){
+			info = new JLabel(text);
+		}
+		else{
+			info.setText(text);
+		}
+		return info;
+	}
+	public JLabel getTxtSpec(String text){
+		if(spec==null){
+			spec = new JLabel(text);
+		}
+		else{
+			spec.setText(text);
+		}
+		return spec;
+	}
 	public JLabel getTxtAccArtiste(String text){
 		txtAccArtiste = new JLabel(text);
 		return txtAccArtiste;
@@ -694,7 +746,15 @@ public class FenetrePrincipale extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						Controller.getInstance().valider(spectacleID);
+						try {
+							Controller.getInstance().valider(spectacleID);
+						} catch (NoSuchAlgorithmException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (UnsupportedEncodingException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} catch (BLLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -713,8 +773,8 @@ public class FenetrePrincipale extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						Controller.getInstance().validerNew();
-					} catch (BLLException e1) {
+						Controller.getInstance().validerNew(spectacleID);
+					} catch (BLLException | NoSuchAlgorithmException | UnsupportedEncodingException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -744,6 +804,8 @@ public class FenetrePrincipale extends JFrame {
 	}
 	
 /*********************************** JTextField ***********************************/
+	
+	
 	
 	public JTextField getFieldNom(){
 		if (fieldNom == null){
@@ -805,9 +867,17 @@ public class FenetrePrincipale extends JFrame {
 		return comboPlacesNew;
 	}
 	
-	public JComboBox<Client> getComboClients(){
+	public JComboBox<String> getComboClients() throws BLLException{
 		if (comboClients == null){
-			comboClients = new JComboBox<Client>();
+			String[] vListeClients = new String[ClientManager.getInstance().getClient().size()];
+			List<Client> vListeClientele = ClientManager.getInstance().getClient();
+			for(int i=0;i<vListeClientele.size();i++){
+				vListeClients[i]=vListeClientele.get(i).getvNom()+" "+vListeClientele.get(i).getvPrenom()+" - "+vListeClientele.get(i).getvEmail();
+				
+			}
+			comboClients = new JComboBox<String>(vListeClients);
+			
+			
 		}
 		return comboClients;
 	}

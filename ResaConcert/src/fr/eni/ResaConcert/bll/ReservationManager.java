@@ -37,9 +37,10 @@ public class ReservationManager {
 		return reservations;
 	}
 	
-	public void addReservation (Reservation newReservation) throws BLLException{
+	public String addReservation (Reservation newReservation) throws BLLException{
 		try{
-			daoReservation.insert(newReservation);
+			String vIDReservation = daoReservation.insert(newReservation);
+			return vIDReservation;
 		}catch(DALException e) {
 			throw new BLLException("Echec d'ajout de la reservation", e);
 		}
@@ -63,7 +64,16 @@ public class ReservationManager {
 		return ResaByClient;
 	}
 
-	
+	public Reservation getReservationById(String id) throws BLLException{
+		Reservation ResaByClient = null;
+		try{
+			ResaByClient = daoReservation.selectById(id);
+		}catch(DALException e){
+			throw new BLLException("Erreur récuperation réservation du client", e);
+		}
+		return ResaByClient;
+	}
+
 	
 	
 	

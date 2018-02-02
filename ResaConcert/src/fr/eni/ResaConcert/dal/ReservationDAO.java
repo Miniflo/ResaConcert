@@ -16,7 +16,7 @@ public interface ReservationDAO {
 	public List<Reservation> selectAll() throws DALException;
 
 	//Inserer la reservation mis en parametre
-	public void insert(Reservation data) throws DALException;
+	public String insert(Reservation data) throws DALException;
 
 	//Supprimer la reservation mis en parametre
  	public void delete(String vCode_Reservation) throws DALException;

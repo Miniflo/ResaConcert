@@ -1,5 +1,8 @@
 package fr.eni.ResaConcert.ihm;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -36,7 +39,7 @@ public class Controller {
 		return Controller.instance;
 	}
 	
-	public void startApp(){
+	public void startApp() throws BLLException{
 		fen = new FenetrePrincipale();
 		setSpectacleAccueil();
 		setReservations();
@@ -57,15 +60,15 @@ public class Controller {
 		}
 	}
 	
-	public void setReservations(){	
+	public void setReservations() throws BLLException{	
 		int i = 0;
 		while (i < reservations.size()-1){
 			fen.gbcReservations.gridy++;
 			int clientID = reservations.get(i).getvClient_id();
-			String client = clients.get(clientID-1).getvPrenom() + " " + clients.get(clientID-1).getvNom() + " / " + clients.get(clientID-1).getvEmail();
+			String client = ClientManager.getInstance().getClientById(clientID).getvPrenom() + " " + ClientManager.getInstance().getClientById(clientID).getvNom() + " / " + ClientManager.getInstance().getClientById(clientID).getvEmail();
 			
 			int specID = reservations.get(i).getvSpectacle_id();
-			String spec = spectacles.get(specID-1).getvArtiste() + ", " + spectacles.get(specID-1).getvTitre();
+			String spec = SpectacleManager.getInstance().getSpectacle(specID).getvArtiste() + ", " + SpectacleManager.getInstance().getSpectacle(specID).getvTitre();
 			
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 			String info = df.format(reservations.get(i).getvDate_reservation());
@@ -85,11 +88,11 @@ public class Controller {
 		}
 	}
 	
-	public void reserver(int specIndex){
+	public void reserver(int specIndex) throws BLLException{
 		String spec = spectacles.get(specIndex).getvArtiste() + ", " + spectacles.get(specIndex).getvTitre();
 		String info = spectacles.get(specIndex).getvLieu() + " / " + spectacles.get(specIndex).getvDate();
 		int nbPlace = spectacles.get(specIndex).getvPlaces_disponibles();
-		fen.changnerFen(fen.menuReservationLogIn(specIndex,spec, info, nbPlace));
+		fen.changnerFen(fen.menuReservationLogIn(spec, info, nbPlace,specIndex));
 	}
 	
 	public void supprimer(int index) throws BLLException{
@@ -108,23 +111,50 @@ public class Controller {
 		fen.changnerFen(fen.panelReservations);
 	}
 	
-	public void validerNew() throws BLLException{
-		ajouterClient();
-		System.out.println("Creation reservation");
-		fen.changnerFen(fen.menuValidation("spec", "info", 50, "ABCDEF"));
+	public void validerNew(int spectacleID) throws BLLException, NoSuchAlgorithmException, UnsupportedEncodingException{
+		int IDClient = ajouterClient();
+		int nbPlaces = (int) fen.getComboPlacesNew().getSelectedItem();
+		
+		int idSpec = spectacles.get(spectacleID-1).getvID();
+		String IDReservation = ajouterReservation(idSpec, IDClient, nbPlaces);
+		Spectacle spectacle = SpectacleManager.getInstance().getSpectacle(idSpec);
+		String spec = spectacle.getvArtiste() + ", "+ spectacle.getvTitre();
+		String info = spectacle.getvLieu() + "/" + spectacle.getvDate();
+		int placesapres = spectacle.getvPlaces_disponibles()-nbPlaces;
+		SpectacleManager.getInstance().updateSpectacle(spectacle, placesapres);
+		fen.changnerFen(fen.menuValidation(spec, info, placesapres, IDReservation));
 	}
 	
-	public void valider(int spectacleID){
-		System.out.println("ID spectacle" + spectacleID);
-		System.out.println("Creation reservation");
-		fen.changnerFen(fen.menuValidation("spec", "info", 50, "ABCDEF"));
+	public void valider(int spectacleID) throws NoSuchAlgorithmException, UnsupportedEncodingException, BLLException{
+		int IDClient =  ((Client)fen.getComboPlaces().getSelectedItem()).getID();
+		int nbPlaces = (int) fen.getComboPlacesNew().getSelectedItem();
+		
+		int idSpec = spectacles.get(spectacleID-1).getvID();
+		String IDReservation = ajouterReservation(idSpec, IDClient, nbPlaces);
+		Spectacle spectacle = SpectacleManager.getInstance().getSpectacle(idSpec);
+		String spec = spectacle.getvArtiste() + ", "+ spectacle.getvTitre();
+		String info = spectacle.getvLieu() + "/" + spectacle.getvDate();
+		int placesapres = spectacle.getvPlaces_disponibles()-nbPlaces;
+		SpectacleManager.getInstance().updateSpectacle(spectacle, placesapres);
+		fen.changnerFen(fen.menuValidation(spec, info, placesapres, IDReservation));
 	}
 	
 	public void retourAccueil(){
 		fen.changnerFen(fen.menuAccueil());
 	}
 	
-	private void ajouterClient() throws BLLException{
+	private String ajouterReservation(int idSpectacle,int iDClient, int place) throws BLLException, NoSuchAlgorithmException, UnsupportedEncodingException{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		java.util.Date utilDate = new java.util.Date();
+		java.sql.Date vdate = new java.sql.Date(utilDate.getTime());
+		
+		Reservation vReservation = new Reservation(idSpectacle, iDClient, place, vdate);
+		String numResa = ReservationManager.getInstance().addReservation(vReservation);
+		return numResa;
+	}
+	
+	
+	private int ajouterClient() throws BLLException{
 		String nom = fen.getFieldNom().getText();
 		String prenom = fen.getFieldPrenom().getText();
 		String email = fen.getFieldEMail().getText();
@@ -132,12 +162,12 @@ public class Controller {
 		String CP = fen.getFieldCP().getText();
 		String ville = fen.getFieldVille().getText();
 		Client newClient = new Client(nom,prenom,email,adresse,CP,ville);
-		ClientManager.getInstance().addClient(newClient);
+		int idClient = ClientManager.getInstance().addClient(newClient);
 		clients = ClientManager.getInstance().getClient();
+		return idClient;
 	}
 	
 	public void reservationsAll() throws BLLException{
-		fen.panelReservations = null;
 		clients = ClientManager.getInstance().getClient();
 		setReservations();
 		fen.changnerFen(fen.menuReservations());

@@ -29,6 +29,17 @@ public class SpectacleManager {
 		daoSpectacle = DAOFactory.getSpectacleDAO();
 	}
 
+	public Spectacle getSpectacle(int id)throws BLLException{
+		Spectacle spectacle = null;
+	try{
+		spectacle = daoSpectacle.selectById(id);
+	}catch(DALException e){
+		e.printStackTrace();
+		throw new BLLException("Erreur récupération spectacle",e);
+	}
+	return spectacle;
+	}
+	
 	public List<Spectacle> getSpectacle()throws BLLException{
 		List<Spectacle> spectacle = null;
 	try{

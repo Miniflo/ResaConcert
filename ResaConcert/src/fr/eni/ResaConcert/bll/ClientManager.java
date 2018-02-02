@@ -28,6 +28,16 @@ public class ClientManager {
 	}
 	
 	
+	public Client getClientById(int id) throws BLLException{
+		Client clients = null;
+		try {
+			clients = daoClient.selectById(id);
+		} catch (DALException e){
+			e.printStackTrace();
+			throw new BLLException("Erreur récupération Client", e);
+		}
+		return clients;
+	}
 	
 	
 	public List<Client> getClient() throws BLLException{
@@ -41,13 +51,14 @@ public class ClientManager {
 		return clients;
 	}
 	
-	public void addClient(Client newClient) throws BLLException {
-		if(newClient.getClass()!=null){
-			throw new BLLException("Article deja existant.");
+	public int addClient(Client newClient) throws BLLException {
+		if(newClient.getClass()==null){
+			throw new BLLException("Client deja existant.");
 		}
 		try {
 			validerClient(newClient);
-			daoClient.insert(newClient);
+			int IDClient = daoClient.insert(newClient);
+			return IDClient;
 		} catch (DALException e){
 			throw new BLLException("Echec d'ajout du client.", e);
 		}
@@ -71,7 +82,7 @@ public class ClientManager {
 			valide = false;
 	}
 		if(c.getvPrenom()==null || c.getvPrenom().trim().length()==0){
-			sb.append("Le prénom est obligatoir\n");
+			sb.append("Le prénom est obligatoire.\n");
 			valide = false;
 	}
 		if(c.getvEmail()==null || c.getvEmail().trim().length()==0){

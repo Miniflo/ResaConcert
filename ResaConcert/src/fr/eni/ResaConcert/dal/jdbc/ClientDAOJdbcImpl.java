@@ -112,7 +112,7 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 		}
 		
 		@Override
-		public void insert(Client client) throws DALException {
+		public int insert(Client client) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
@@ -125,8 +125,15 @@ public class ClientDAOJdbcImpl implements ClientDAO{
 				rqt.setString(5, client.getvCode_postal());
 				rqt.setString(6, client.getvVille());
 				
-				rqt.executeUpdate();
-				
+				int nbRows = rqt.executeUpdate();
+				if(nbRows == 1){
+					ResultSet rs = rqt.getGeneratedKeys();
+					if(rs.next()){
+						client.setID(rs.getInt(1));
+					}
+
+				}
+				return client.getID();
 			}catch(SQLException e){
 				throw new DALException("Insert client failed - " + client, e);
 			}

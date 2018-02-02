@@ -109,7 +109,7 @@ public class ReservationDAOJdbcImpl implements ReservationDAO{
 		}
 		
 
-		public void insert(Reservation reservation) throws DALException {
+		public String insert(Reservation reservation) throws DALException {
 			Connection cnx = null;
 			PreparedStatement rqt = null;
 			try {
@@ -123,7 +123,8 @@ public class ReservationDAOJdbcImpl implements ReservationDAO{
 				rqt.setDate(5, reservation.getvDate_reservation());
 				
 				rqt.executeUpdate();
-				
+				return reservation.getvCode_reservation();
+
 			}catch(SQLException e){
 				throw new DALException("Insert reservation failed - " + reservation, e);
 			}
@@ -138,8 +139,8 @@ public class ReservationDAOJdbcImpl implements ReservationDAO{
 				} catch (SQLException e) {
 					throw new DALException("close failed - ", e);
 				}
-	
 			}
+
 		}
 
 

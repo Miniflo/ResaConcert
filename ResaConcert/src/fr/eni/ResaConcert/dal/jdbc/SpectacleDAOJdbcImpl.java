@@ -19,7 +19,7 @@ public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 
 	private static final String sqlSelectAll = "Select * from Spectacle";
 	private static final String sqlSelectById = "Select * from Spectacle where id = ?";
-	private static final String sqlUpdate = "update spectacle set places_disponibles = ?";
+	private static final String sqlUpdate = "update spectacle set places_disponibles = ? where id=?";
 	
 	public Spectacle selectById(int id) throws DALException {
 			Connection cnx = null;
@@ -117,6 +117,7 @@ public class SpectacleDAOJdbcImpl implements SpectacleDAO{
 				cnx = JDBCTools.getConnection();
 				rqt = cnx.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
 				rqt.setInt(1, nb_places);
+				rqt.setInt(2, spectacle.getvID());
 		
 				rqt.executeUpdate();
 				
